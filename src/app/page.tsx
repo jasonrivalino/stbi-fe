@@ -102,7 +102,7 @@ export function Menu({ setSelectedOption, onSubmit }: MenuProps) {
   return (
     <div className="p-4 border rounded-xl text-white bg-gray-800 shadow-lg w-full">
       <div className="flex flex-row gap-5">
-        <div className="flex flex-col gap-4 w-1/2">
+        <div className="flex flex-col gap-4">
           <div className="flex flex-row justify-between items-center pb-4 border-b-2">
 
             {/* Stemming Toggle */}
@@ -202,9 +202,9 @@ export function Menu({ setSelectedOption, onSubmit }: MenuProps) {
           </div>
           
           {/* Terms */}
-          <div className="flex flex-row gap-9 w-full pt-4 border-t-2">
+          <div className="flex flex-row w-full pt-4 border-t-2 justify-between items-center">
             {/* Max Terms */}
-            <div className="flex flex-row gap-3 w-full">
+            <div className="flex items-center gap-3 w-full">
               <h2 className="text-base font-semibold mt-[0.125rem]">Max Terms:</h2>
               <input
                 type="number"
@@ -216,8 +216,8 @@ export function Menu({ setSelectedOption, onSubmit }: MenuProps) {
             </div>
 
             {/* Add All Terms */}
-            <div className="flex flex-row gap-3 w-full">
-              <h2 className="text-base font-semibold">Add All Terms:</h2>
+            <div className="flex flex-row items-center w-full">
+              <h2 className="text-base font-semibold ml-auto">Add All Terms:</h2>
                 <label className="inline-flex items-center cursor-pointer relative ml-auto">
                   <input
                     type="checkbox"
@@ -233,80 +233,80 @@ export function Menu({ setSelectedOption, onSubmit }: MenuProps) {
                 </label>
               </div>
             </div>
-        </div>
 
         {/* Add vertical line separator */}
-        <div className="border-1 border-white h-auto"></div>
+        {/* <div className="border-1 border-white h-auto"></div> */}
 
-        {/* Query Method */}
-        <div className="flex flex-col gap-2 w-full justify-center align-middle">
-          <h2 className="text-base font-semibold">Query Method:</h2>
-          <div className="flex flex-col gap-2 w-full">
-            {/* Interactive */}
-            <label className="inline-flex items-center cursor-pointer relative">
-              <input
-                type="radio"
-                name="queryMethod"
-                value="interactive"
-                onChange={() => setSelectedOption("interactive")}
-                className="sr-only peer"
+          {/* Query Method */}
+          <div className="flex flex-col gap-2 w-full justify-center align-middle pt-4 pb-6 border-y-2">
+            <h2 className="text-base font-semibold">Query Method:</h2>
+            <div className="flex flex-col gap-2 w-full">
+              {/* Interactive */}
+              <label className="inline-flex items-center cursor-pointer relative">
+                <input
+                  type="radio"
+                  name="queryMethod"
+                  value="interactive"
+                  onChange={() => setSelectedOption("interactive")}
+                  className="sr-only peer"
+                />
+                <span className="w-4 h-4 rounded-full border border-gray-400 peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-all duration-200"></span>
+                <span className="ml-2 text-sm font-semibold">Interactive</span>
+              </label>
+              <textarea
+                rows={2}
+                className="p-1 bg-gray-700 text-white rounded-md text-sm w-full resize-none"
+                placeholder="Enter your query input"
+                onChange={(e) => setSelectedOption(e.target.value)}
               />
-              <span className="w-4 h-4 rounded-full border border-gray-400 peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-all duration-200"></span>
-              <span className="ml-2 text-sm font-semibold">Interactive</span>
-            </label>
-            <textarea
-              rows={2}
-              className="p-1 bg-gray-700 text-white rounded-md text-sm w-full resize-none"
-              placeholder="Enter your query input"
-              onChange={(e) => setSelectedOption(e.target.value)}
-            />
 
-            {/* Batch */}
-            <label className="inline-flex items-center cursor-pointer relative mt-2">
-              <input
-                type="radio"
-                name="queryMethod"
-                value="batch"
-                onChange={() => setSelectedOption("batch")}
-                className="sr-only peer"
-              />
-              <span className="w-4 h-4 rounded-full border border-gray-400 peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-all duration-200"></span>
-              <span className="ml-2 text-sm font-semibold">Batch</span>
-            </label>
-
-            {/* Load files in 3 columns */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-              {/* Query file */}
-              <div className="flex flex-col">
-                <label className="text-sm font-medium text-white mb-1">Query File</label>
+              {/* Batch */}
+              <label className="inline-flex items-center cursor-pointer relative mt-2">
                 <input
-                  type="file"
-                  accept=".txt, .csv"
-                  className="p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 hover:border-blue-400 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
-                  onChange={(e) => handleQueryFileUpload(e)}
+                  type="radio"
+                  name="queryMethod"
+                  value="batch"
+                  onChange={() => setSelectedOption("batch")}
+                  className="sr-only peer"
                 />
-              </div>
+                <span className="w-4 h-4 rounded-full border border-gray-400 peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-all duration-200"></span>
+                <span className="ml-2 text-sm font-semibold">Batch</span>
+              </label>
 
-              {/* Document file */}
-              <div className="flex flex-col">
-                <label className="text-sm font-medium text-white mb-1">Document File</label>
-                <input
-                  type="file"
-                  accept=".txt, .csv"
-                  className="p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 hover:border-blue-400 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
-                  onChange={(e) => handleDocumentFileUpload(e)}
-                />
-              </div>
+              {/* Load files in 3 columns */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+                {/* Query file */}
+                <div className="flex flex-col">
+                  <label className="text-sm font-medium text-white mb-1">Query File</label>
+                  <input
+                    type="file"
+                    accept=".txt, .csv"
+                    className="p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 hover:border-blue-400 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
+                    onChange={(e) => handleQueryFileUpload(e)}
+                  />
+                </div>
 
-              {/* Relevance Judgment file */}
-              <div className="flex flex-col">
-                <label className="text-sm font-medium text-white mb-1">Relevance Judgement File</label>
-                <input
-                  type="file"
-                  accept=".txt, .csv"
-                  className="p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 hover:border-blue-400 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
-                  onChange={(e) => handleRelevanceFileUpload(e)}
-                />
+                {/* Document file */}
+                <div className="flex flex-col">
+                  <label className="text-sm font-medium text-white mb-1">Document File</label>
+                  <input
+                    type="file"
+                    accept=".txt, .csv"
+                    className="p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 hover:border-blue-400 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
+                    onChange={(e) => handleDocumentFileUpload(e)}
+                  />
+                </div>
+
+                {/* Relevance Judgment file */}
+                <div className="flex flex-col">
+                  <label className="text-sm font-medium text-white mb-1">Relevance Judgement File</label>
+                  <input
+                    type="file"
+                    accept=".txt, .csv"
+                    className="p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 hover:border-blue-400 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
+                    onChange={(e) => handleRelevanceFileUpload(e)}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -330,7 +330,7 @@ type ResultProps = {
 
 export function Result({ selected }: ResultProps) {
   return (
-    <div className="p-4 border rounded-md bg-gray-100 h-60 shadow-lg">
+    <div className="p-4 border rounded-md bg-gray-100 h-full shadow-lg">
       <h1 className="text-xl font-bold mb-2 text-black">Result</h1>
       <p className="text-black">
         {selected
@@ -358,8 +358,8 @@ export default function Home() {
         <h1 className="text-3xl font-bold pt-8 pb-4 text-center">
           Query Expansion: Automatically Generated Thesaurus Method
         </h1>
-        <div className="flex flex-col w-full gap-6">
-          <div className="w-full">
+        <div className="flex flex-row w-full gap-6">
+          <div className="w-4/5">
              <Menu
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
