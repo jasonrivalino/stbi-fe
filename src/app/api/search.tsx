@@ -1,5 +1,3 @@
-// lib/api/search.ts
-
 export type SearchParams = {
   q: string;
   'weights.docs.tf': 'n' | 'l' | 'a' | 'b';
@@ -27,7 +25,8 @@ export async function fetchInteractiveSearch(params: SearchParams) {
     top_k: String(params.top_k),
   });
 
-  const url = `http://127.0.0.1:8000/search/interactive/?${query.toString()}`;
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const url = `${baseUrl}/search/interactive/?${query.toString()}`;
   
   // Debug: log constructed URL
   console.log('Fetching from URL:', url);

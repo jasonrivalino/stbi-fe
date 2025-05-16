@@ -7,6 +7,7 @@ type MenuProps = {
 };
 
 export function Menu({ onSubmit }: MenuProps) {
+  // State variables for toggles and inputs
   const [isStemmingChecked, setIsStemmingChecked] = useState(false);
   const [isEliminationChecked, setIsEliminationChecked] = useState(false);
   const [isIDFDocumentChecked, setIsIDFDocumentChecked] = useState(false);
@@ -16,7 +17,6 @@ export function Menu({ onSubmit }: MenuProps) {
   const [isCosineQueryChecked, setIsCosineQueryChecked] = useState(false);
   const [query, setQuery] = useState('');
   const [topK, setTopK] = useState(0);
-
   const [params, setParams] = useState<SearchParams>({
     q: '',
     'weights.docs.tf': 'n',
@@ -30,10 +30,12 @@ export function Menu({ onSubmit }: MenuProps) {
     top_k: 0,
   });
 
+  // Function to update parameters
   const updateParam = <T extends keyof SearchParams>(key: T, value: SearchParams[T]) => {
     setParams((prev) => ({ ...prev, [key]: value }));
   };
 
+  // Function to handle form submission
   const handleFormSubmit = () => {
     const updatedParams = {
       ...params,
@@ -45,6 +47,8 @@ export function Menu({ onSubmit }: MenuProps) {
     onSubmit(updatedParams);
   };
 
+  // Handlers for toggle switches
+  // These handlers update the state and call the updateParam function to set the corresponding parameter
   const handleStemmingToggle = () => {
     const newValue = !isStemmingChecked;
     setIsStemmingChecked(newValue);
@@ -148,6 +152,8 @@ export function Menu({ onSubmit }: MenuProps) {
     }
   };
   
+  // Handlers for file uploads
+  // These handlers will be called when the user selects a file for each respective input
   const handleQueryFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     // Handle query file upload logic
