@@ -17,6 +17,14 @@ export function Menu({ onSubmit }: MenuProps) {
   const [isCosineQueryChecked, setIsCosineQueryChecked] = useState(false);
   const [query, setQuery] = useState('');
   const [topK, setTopK] = useState(0);
+
+  const [selectedOption, setSelectedOption] = useState('');
+  const isInteractive = selectedOption === 'interactive';
+  const isBatch = selectedOption === 'batch';
+  const [queryFile, setQueryFile] = useState<File | null>(null);
+  const [documentFile, setDocumentFile] = useState<File | null>(null);
+  const [relevanceFile, setRelevanceFile] = useState<File | null>(null);
+
   const [params, setParams] = useState<SearchParams>({
     q: '',
     'weights.docs.tf': 'n',
@@ -37,6 +45,54 @@ export function Menu({ onSubmit }: MenuProps) {
 
   // Function to handle form submission
   const handleFormSubmit = () => {
+    const tfDocsInactive = params['weights.docs.tf'] === 'n';
+    const idfDocsInactive = !isIDFDocumentChecked;
+    const cosineDocsInactive = !isCosineDocumentChecked;
+    
+    const maxTerms = topK > 0;
+
+    if (tfDocsInactive && idfDocsInactive && cosineDocsInactive) {
+      alert('Please select at least one document weighting method (TF, IDF, or Cosine) for the documents.');
+      return;
+    }
+
+    if (!maxTerms) {
+      alert('Please enter a valid number for Max Terms.');
+      return;
+    }
+
+    // === Check query mode selected ===
+    if (!selectedOption) {
+      alert("Please select a query method: Interactive or Batch.");
+      return;
+    }
+
+    // === INTERACTIVE mode validations ===
+    if (selectedOption === 'interactive') {
+      if (!query.trim()) {
+        alert("Please enter your query input.");
+        return;
+      }
+
+      const tfQueryInactive = params['weights.query.tf'] === 'n';
+      const idfQueryInactive = !isIDFQueryChecked;
+      const cosineQueryInactive = !isCosineQueryChecked;
+
+      if (tfQueryInactive && idfQueryInactive && cosineQueryInactive) {
+        alert("Please select at least one weighting method (TF, IDF, or Cosine) for the query.");
+        return;
+      }
+    }
+
+    // === BATCH mode validations ===
+    if (selectedOption === 'batch') {
+      if (!queryFile || !documentFile || !relevanceFile) {
+        alert("Please upload all required batch files: Query, Document, and Relevance Judgement.");
+        return;
+      }
+    }
+
+    // === Final param setting and submission ===
     const updatedParams = {
       ...params,
       q: query,
@@ -46,6 +102,7 @@ export function Menu({ onSubmit }: MenuProps) {
     console.log("Submitting parameters:", updatedParams);
     onSubmit(updatedParams);
   };
+
 
   // Handlers for toggle switches
   // These handlers update the state and call the updateParam function to set the corresponding parameter
@@ -156,17 +213,35 @@ export function Menu({ onSubmit }: MenuProps) {
   // These handlers will be called when the user selects a file for each respective input
   const handleQueryFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    // Handle query file upload logic
+    if (file) {
+      setQueryFile(file);
+      console.log("Query file uploaded:", file.name);
+      // You can also read the file content here if needed
+    } else {
+      console.error("No file selected for query upload.");
+    }
   };
 
   const handleDocumentFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    // Handle document file upload logic
+    if (file) {
+      setDocumentFile(file);
+      console.log("Document file uploaded:", file.name);
+      // You can also read the file content here if needed
+    } else {
+      console.error("No file selected for document upload.");
+    }
   };
 
   const handleRelevanceFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    // Handle relevance file upload logic
+    if (file) {
+      setRelevanceFile(file);
+      console.log("Relevance judgement file uploaded:", file.name);
+      // You can also read the file content here if needed
+    } else {
+      console.error("No file selected for relevance judgement upload.");
+    }
   };
 
   return (
@@ -226,7 +301,6 @@ export function Menu({ onSubmit }: MenuProps) {
                 value={params['weights.docs.tf']}
                 onChange={(e) => updateParam('weights.docs.tf', e.target.value as SearchParams['weights.docs.tf'])}
               >
-                <option value="">Select a method</option>
                 <option value="l">Logarithmic</option>
                 <option value="b">Binary</option>
                 <option value="a">Augmented</option>
@@ -317,7 +391,7 @@ export function Menu({ onSubmit }: MenuProps) {
                   type="radio"
                   name="queryMethod"
                   value="interactive"
-                  // onChange={() => setSelectedOption("interactive")}
+                  onChange={() => setSelectedOption("interactive")}
                   className="sr-only peer"
                 />
                 <span className="w-4 h-4 rounded-full border border-gray-400 peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-all duration-200"></span>
@@ -325,25 +399,31 @@ export function Menu({ onSubmit }: MenuProps) {
               </label>
               <textarea
                 rows={2}
-                className="p-1 bg-gray-700 text-white rounded-md text-sm w-full resize-none"
+                disabled={!isInteractive}
+                className={`p-1 bg-gray-700 text-white rounded-md text-sm w-full resize-none
+                  ${!isInteractive ? 'opacity-50 cursor-not-allowed' : ''}
+                `}
                 placeholder="Enter your query input"
                 onChange={(e) => setQuery(e.target.value)}
               />
 
               {/* Query Weighting */}
               <div className="flex flex-row gap-7 mt-1">
-                <h2 className="text-sm font-semibold">Query Weighting:</h2>
+                <h2 className={`text-sm font-semibold ${!isInteractive ? 'text-gray-500' : 'text-white'}`}>
+                  Query Weighting:
+                </h2>
                 
                 {/* TF */}
                 <div className="flex flex-row justify-between items-center ml-auto">
-                  <h3 className="text-sm justify-center align-center text-center mr-2 font-semibold"> 
+                  <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold ${!isInteractive ? 'text-gray-500' : 'text-white'}`}>
                     TF
-                  </h3>
+                  </h2>
                   <select
-                    className="p-1 bg-gray-700 text-white rounded-md text-sm"
-                    onChange={(e) => updateParam('weights.query.tf', e.target.value as SearchParams['weights.query.tf'])}
+                    className={`p-1 bg-gray-700 text-white rounded-md text-sm ${!isInteractive ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    value={params['weights.query.tf']}
+                    onChange={(e) => isInteractive && updateParam('weights.query.tf', e.target.value as SearchParams['weights.query.tf'])}
+                    disabled={!isInteractive}
                   >
-                    <option value="">Select a method</option>
                     <option value="l">Logarithmic</option>
                     <option value="b">Binary</option>
                     <option value="a">Augmented</option>
@@ -353,15 +433,22 @@ export function Menu({ onSubmit }: MenuProps) {
 
                 {/* IDF */}
                 <div className="flex items-center justify-between">
-                  <h2 className="text-sm justify-center align-center text-center mr-2 font-semibold">IDF</h2>
+                  <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold ${!isInteractive ? 'text-gray-500' : 'text-white'}`}>
+                    IDF
+                  </h2>
                   <label className="inline-flex items-center cursor-pointer relative">
                     <input
                       type="checkbox"
                       checked={isIDFQueryChecked}
-                      onChange={handleIDFQueryToggle}
+                      onChange={() => isInteractive && handleIDFQueryToggle()}
                       className="sr-only peer"
+                      disabled={!isInteractive}
                     />
-                    <div className="w-5 h-5 bg-gray-300 rounded-md relative transition-colors duration-300 peer-checked:bg-blue-500 flex items-center justify-center">
+                    <div
+                      className={`w-5 h-5 rounded-md relative transition-colors duration-300 flex items-center justify-center
+                        ${isInteractive ? 'bg-gray-300 peer-checked:bg-blue-500 cursor-pointer' : 'bg-gray-500 cursor-not-allowed'}
+                      `}
+                    >
                       {isIDFQueryChecked && (
                         <span className="text-white text-xs font-bold">✔</span>
                       )}
@@ -371,15 +458,22 @@ export function Menu({ onSubmit }: MenuProps) {
 
                 {/* Cosine */}
                 <div className="flex items-center justify-between">
-                  <h2 className="text-sm justify-center align-center text-center mr-2 font-semibold">Cosine</h2>
+                  <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold ${!isInteractive ? 'text-gray-500' : 'text-white'}`}>
+                    Cosine
+                  </h2>
                   <label className="inline-flex items-center cursor-pointer relative">
                     <input
                       type="checkbox"
                       checked={isCosineQueryChecked}
-                      onChange={handleCosineQueryToggle}
+                      onChange={() => isInteractive && handleCosineQueryToggle()}
                       className="sr-only peer"
+                      disabled={!isInteractive}
                     />
-                    <div className="w-5 h-5 bg-gray-300 rounded-md relative transition-colors duration-300 peer-checked:bg-blue-500 flex items-center justify-center">
+                    <div
+                      className={`w-5 h-5 rounded-md relative transition-colors duration-300 flex items-center justify-center
+                        ${isInteractive ? 'bg-gray-300 peer-checked:bg-blue-500 cursor-pointer' : 'bg-gray-500 cursor-not-allowed'}
+                      `}
+                    >
                       {isCosineQueryChecked && (
                         <span className="text-white text-xs font-bold">✔</span>
                       )}
@@ -394,7 +488,7 @@ export function Menu({ onSubmit }: MenuProps) {
                   type="radio"
                   name="queryMethod"
                   value="batch"
-                  // onChange={() => setSelectedOption("batch")}
+                  onChange={() => setSelectedOption("batch")}
                   className="sr-only peer"
                 />
                 <span className="w-4 h-4 rounded-full border border-gray-400 peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-all duration-200"></span>
@@ -405,33 +499,45 @@ export function Menu({ onSubmit }: MenuProps) {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
                 {/* Query file */}
                 <div className="flex flex-col">
-                  <label className="text-sm font-medium text-white mb-1">Query File</label>
+                  <label className={`text-sm font-medium mb-1 ${!isBatch ? 'text-gray-500' : 'text-white'}`}>
+                    Query File
+                  </label>
                   <input
                     type="file"
                     accept=".txt, .csv"
-                    className="p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 hover:border-blue-400 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
+                    disabled={!isBatch}
+                    className={`p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 transition-colors duration-200 cursor-pointer
+                      ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}
                     onChange={(e) => handleQueryFileUpload(e)}
                   />
                 </div>
 
                 {/* Document file */}
                 <div className="flex flex-col">
-                  <label className="text-sm font-medium text-white mb-1">Document File</label>
+                  <label className={`text-sm font-medium mb-1 ${!isBatch ? 'text-gray-500' : 'text-white'}`}>
+                    Document File
+                  </label>
                   <input
                     type="file"
                     accept=".txt, .csv"
-                    className="p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 hover:border-blue-400 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
+                    disabled={!isBatch}
+                    className={`p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 transition-colors duration-200 cursor-pointer
+                      ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}
                     onChange={(e) => handleDocumentFileUpload(e)}
                   />
                 </div>
 
                 {/* Relevance Judgment file */}
                 <div className="flex flex-col">
-                  <label className="text-sm font-medium text-white mb-1">Relevance Judgement File</label>
+                  <label className={`text-sm font-medium mb-1 ${!isBatch ? 'text-gray-500' : 'text-white'}`}>
+                    Relevance Judgement File
+                  </label>
                   <input
                     type="file"
                     accept=".txt, .csv"
-                    className="p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 hover:border-blue-400 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
+                    disabled={!isBatch}
+                    className={`p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 transition-colors duration-200 cursor-pointer
+                      ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}                    
                     onChange={(e) => handleRelevanceFileUpload(e)}
                   />
                 </div>
