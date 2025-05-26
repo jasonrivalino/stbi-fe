@@ -1,14 +1,15 @@
 "use client";
 import { useState } from "react";
-import { fetchInteractiveSearch, SearchParams } from "./api/search";
+import { fetchInteractiveSearch, SearchParams } from "./api/interactiveSearch";
 import { Menu } from "./component/menu";
 import { Result } from "./component/result";
+import { fetchBatchSearch } from "./api/batchSearch";
 
 export default function Home() {
   const [searchResult, setSearchResult] = useState<any>(null);
   const [submittedParams, setSubmittedParams] = useState<SearchParams | null>(null);
 
-  const handleSubmit = async (params: SearchParams) => {
+  const handleInteractiveSubmit = async (params: SearchParams) => {
     console.log("Submitting parameters (from Menu):", params);
     setSubmittedParams(params);
 
@@ -20,6 +21,15 @@ export default function Home() {
     }
   };
 
+  const handleBatchSubmit = async (formData: FormData) => {
+    try {
+      const result = await fetchBatchSearch(formData);
+      setSearchResult(result);
+    } catch (error) {
+      console.error("Error in batch search:", error);
+    }
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between px-16">
       <div className="flex flex-col gap-4 items-center justify-center w-full">
@@ -28,7 +38,7 @@ export default function Home() {
         </h1>
         <div className="flex flex-row w-full gap-6 pb-14">
           <div className="w-4/5">
-            <Menu onSubmit={handleSubmit} />
+            <Menu onSubmitInteractive={handleInteractiveSubmit} onSubmitBatch={handleBatchSubmit} />
           </div>
           <div className="w-full">
             <Result

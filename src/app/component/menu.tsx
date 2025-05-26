@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
-import { SearchParams } from "../api/search";
+import { SearchParams } from "../api/interactiveSearch";
 
 type MenuProps = {
-  onSubmit: (params: SearchParams) => void;
+  onSubmitInteractive: (params: SearchParams) => void;
+  onSubmitBatch: (formData: FormData) => void; // Add this new prop
 };
 
-export function Menu({ onSubmit }: MenuProps) {
+export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
   // State variables for toggles and inputs
   const [isStemmingChecked, setIsStemmingChecked] = useState(false);
   const [isEliminationChecked, setIsEliminationChecked] = useState(false);
@@ -48,7 +49,7 @@ export function Menu({ onSubmit }: MenuProps) {
     const tfDocsInactive = params['weights.docs.tf'] === 'n';
     const idfDocsInactive = !isIDFDocumentChecked;
     const cosineDocsInactive = !isCosineDocumentChecked;
-    
+
     const maxTerms = topK > 0;
 
     if (tfDocsInactive && idfDocsInactive && cosineDocsInactive) {
@@ -61,7 +62,6 @@ export function Menu({ onSubmit }: MenuProps) {
       return;
     }
 
-    // === Check query mode selected ===
     if (!selectedOption) {
       alert("Please select a query method: Interactive or Batch.");
       return;
@@ -82,6 +82,17 @@ export function Menu({ onSubmit }: MenuProps) {
         alert("Please select at least one weighting method (TF, IDF, or Cosine) for the query.");
         return;
       }
+
+      const updatedParams = {
+        ...params,
+        q: query,
+        top_k: topK,
+      };
+
+      setParams(updatedParams);
+      console.log("Submitting parameters (interactive):", updatedParams);
+      onSubmitInteractive(updatedParams);
+      return;
     }
 
     // === BATCH mode validations ===
@@ -90,18 +101,17 @@ export function Menu({ onSubmit }: MenuProps) {
         alert("Please upload all required batch files: Query, Document, and Relevance Judgement.");
         return;
       }
-    }
 
-    // === Final param setting and submission ===
-    const updatedParams = {
-      ...params,
-      q: query,
-      top_k: topK,
-    };
-    setParams(updatedParams);
-    console.log("Submitting parameters:", updatedParams);
-    onSubmit(updatedParams);
+      const formData = new FormData();
+      formData.append("queries", queryFile);
+      // formData.append("documents", documentFile);
+      formData.append("relevance", relevanceFile);
+
+      console.log("Submitting parameters (batch):", formData);
+      onSubmitBatch(formData);
+    }
   };
+
 
 
   // Handlers for toggle switches
