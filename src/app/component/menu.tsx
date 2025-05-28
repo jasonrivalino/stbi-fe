@@ -46,16 +46,16 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
 
   // Function to handle form submission
   const handleFormSubmit = () => {
-    const tfDocsInactive = params['weights.docs.tf'] === 'n';
-    const idfDocsInactive = !isIDFDocumentChecked;
-    const cosineDocsInactive = !isCosineDocumentChecked;
+    // const tfDocsInactive = params['weights.docs.tf'] === 'n';
+    // const idfDocsInactive = !isIDFDocumentChecked;
+    // const cosineDocsInactive = !isCosineDocumentChecked;
 
     const maxTerms = topK > 0;
 
-    if (tfDocsInactive && idfDocsInactive && cosineDocsInactive) {
-      alert('Please select at least one document weighting method (TF, IDF, or Cosine) for the documents.');
-      return;
-    }
+    // if (tfDocsInactive && idfDocsInactive && cosineDocsInactive) {
+    //   alert('Please select at least one document weighting method (TF, IDF, or Cosine) for the documents.');
+    //   return;
+    // }
 
     if (!maxTerms) {
       alert('Please enter a valid number for Max Terms.');
@@ -74,14 +74,14 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
         return;
       }
 
-      const tfQueryInactive = params['weights.query.tf'] === 'n';
-      const idfQueryInactive = !isIDFQueryChecked;
-      const cosineQueryInactive = !isCosineQueryChecked;
+    //   const tfQueryInactive = params['weights.query.tf'] === 'n';
+    //   const idfQueryInactive = !isIDFQueryChecked;
+    //   const cosineQueryInactive = !isCosineQueryChecked;
 
-      if (tfQueryInactive && idfQueryInactive && cosineQueryInactive) {
-        alert("Please select at least one weighting method (TF, IDF, or Cosine) for the query.");
-        return;
-      }
+    //   if (tfQueryInactive && idfQueryInactive && cosineQueryInactive) {
+    //     alert("Please select at least one weighting method (TF, IDF, or Cosine) for the query.");
+    //     return;
+    //   }
 
       const updatedParams = {
         ...params,
