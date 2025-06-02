@@ -176,7 +176,7 @@ export function Result({ result, params }: ResultProps) {
   }
 
   return (
-    <div className={`${isInteractive ? "p-4" : ""} border rounded-md bg-gray-100 h-full shadow-lg`}>
+    <div className={`${isBatch ? "" : "p-4"} border rounded-md bg-gray-100 h-full shadow-lg`}>
       <h1 className={`text-xl font-bold text-black text-center ${isBatch ? "py-4" : ""}`}>
         Document Rank Result
       </h1>
