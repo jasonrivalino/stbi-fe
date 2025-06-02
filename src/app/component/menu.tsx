@@ -46,16 +46,16 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
 
   // Function to handle form submission
   const handleFormSubmit = () => {
-    // const tfDocsInactive = params['weights.docs.tf'] === 'n';
-    // const idfDocsInactive = !isIDFDocumentChecked;
-    // const cosineDocsInactive = !isCosineDocumentChecked;
+    const tfDocsInactive = params['weights.docs.tf'] === 'n';
+    const idfDocsInactive = !isIDFDocumentChecked;
+    const cosineDocsInactive = !isCosineDocumentChecked;
 
     const maxTerms = topK > 0;
 
-    // if (tfDocsInactive && idfDocsInactive && cosineDocsInactive) {
-    //   alert('Please select at least one document weighting method (TF, IDF, or Cosine) for the documents.');
-    //   return;
-    // }
+    if (tfDocsInactive && idfDocsInactive && cosineDocsInactive) {
+      alert('Please select at least one document weighting method (TF, IDF, or Cosine) for the documents.');
+      return;
+    }
 
     if (!maxTerms) {
       alert('Please enter a valid number for Max Terms.');
@@ -74,14 +74,14 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
         return;
       }
 
-    //   const tfQueryInactive = params['weights.query.tf'] === 'n';
-    //   const idfQueryInactive = !isIDFQueryChecked;
-    //   const cosineQueryInactive = !isCosineQueryChecked;
+      const tfQueryInactive = params['weights.query.tf'] === 'n';
+      const idfQueryInactive = !isIDFQueryChecked;
+      const cosineQueryInactive = !isCosineQueryChecked;
 
-    //   if (tfQueryInactive && idfQueryInactive && cosineQueryInactive) {
-    //     alert("Please select at least one weighting method (TF, IDF, or Cosine) for the query.");
-    //     return;
-    //   }
+      if (tfQueryInactive && idfQueryInactive && cosineQueryInactive) {
+        alert("Please select at least one weighting method (TF, IDF, or Cosine) for the query.");
+        return;
+      }
 
       const updatedParams = {
         ...params,
@@ -255,7 +255,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
   };
 
   return (
-    <div className="p-4 border rounded-xl text-white bg-gray-800 shadow-lg w-full">
+    <div className="py-5 px-4 border rounded-xl text-white bg-gray-800 shadow-lg w-full">
       <div className="flex flex-row gap-5">
         <div className="flex flex-col gap-4">
           <div className="flex flex-row justify-between items-center pb-4 border-b-2">
@@ -509,14 +509,14 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
                 {/* Query file */}
                 <div className="flex flex-col">
-                  <label className={`text-sm font-medium mb-1 ${!isBatch ? 'text-gray-500' : 'text-white'}`}>
+                  <label className={`text-xs font-medium mb-1 ${!isBatch ? 'text-gray-500' : 'text-white'}`}>
                     Query File
                   </label>
                   <input
                     type="file"
                     accept=".txt, .csv"
                     disabled={!isBatch}
-                    className={`p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 transition-colors duration-200 cursor-pointer
+                    className={`p-1 bg-gray-700 text-white rounded-md text-xs border border-gray-600 transition-colors duration-200 cursor-pointer
                       ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}
                     onChange={(e) => handleQueryFileUpload(e)}
                   />
@@ -524,14 +524,14 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
 
                 {/* Document file */}
                 <div className="flex flex-col">
-                  <label className={`text-sm font-medium mb-1 ${!isBatch ? 'text-gray-500' : 'text-white'}`}>
+                  <label className={`text-xs font-medium mb-1 ${!isBatch ? 'text-gray-500' : 'text-white'}`}>
                     Document File
                   </label>
                   <input
                     type="file"
                     accept=".txt, .csv"
                     disabled={!isBatch}
-                    className={`p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 transition-colors duration-200 cursor-pointer
+                    className={`p-1 bg-gray-700 text-white rounded-md text-xs border border-gray-600 transition-colors duration-200 cursor-pointer
                       ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}
                     onChange={(e) => handleDocumentFileUpload(e)}
                   />
@@ -539,14 +539,14 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
 
                 {/* Relevance Judgment file */}
                 <div className="flex flex-col">
-                  <label className={`text-sm font-medium mb-1 ${!isBatch ? 'text-gray-500' : 'text-white'}`}>
+                  <label className={`text-xs font-medium mb-1 ${!isBatch ? 'text-gray-500' : 'text-white'}`}>
                     Relevance Judgement File
                   </label>
                   <input
                     type="file"
                     accept=".txt, .csv"
                     disabled={!isBatch}
-                    className={`p-1 bg-gray-700 text-white rounded-md text-sm border border-gray-600 transition-colors duration-200 cursor-pointer
+                    className={`p-1 bg-gray-700 text-white rounded-md text-xs border border-gray-600 transition-colors duration-200 cursor-pointer
                       ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}                    
                     onChange={(e) => handleRelevanceFileUpload(e)}
                   />

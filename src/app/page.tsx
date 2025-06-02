@@ -37,7 +37,7 @@ export default function Home() {
           Query Expansion: Automatically Generated Thesaurus Method
         </h1>
         <div className="flex flex-row w-full gap-6 pb-14">
-          <div className="w-4/5">
+          <div className="w-2/3">
             <Menu onSubmitInteractive={handleInteractiveSubmit} onSubmitBatch={handleBatchSubmit} />
           </div>
           <div className="w-full">
