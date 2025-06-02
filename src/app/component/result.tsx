@@ -18,7 +18,7 @@ type InteractiveResult = {
   expandedDocuments: Document[];
   expandedTermWeights: { [term: string]: number };
   expandedQuery: string;
-  expandedMeanAveragePrecision?: number;
+  expandedaveragePrecision?: number;
 };
 
 type BatchResult = {
@@ -108,7 +108,7 @@ const QueryResultPanel = ({
       </div>
 
       <div className="h-20 overflow-y-auto bg-white p-2 rounded-md shadow-sm">
-        <h3 className="text-sm font-semibold text-gray-800">Terms dan Weights:</h3>
+        <h3 className="text-sm font-semibold text-gray-800">Terms and Weights:</h3>
         <p className="text-xs text-gray-700 mt-1">
           {(termWeights && Object.keys(termWeights).length > 0
             ? Object.entries(termWeights)
@@ -144,7 +144,7 @@ export function Result({ result, params }: ResultProps) {
   const isInteractive = result && "documents" in result;
   const isBatch = result && "results" in result;
 
-  // Dummy fallback for interactive mode
+  // Dummy fallback for interactive mode (remove when integrating with real data)
   if (isInteractive && result) {
     if (!result.expandedQuery) {
       result.expandedQuery = "dummy lorem ipsum expansion text";
@@ -186,18 +186,20 @@ export function Result({ result, params }: ResultProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <QueryResultPanel
               title="Original Query"
-              query={params.q}
-              termWeights={result.termWeights}
-              averagePrecision={result.averagePrecision}
-              documents={result.documents}
+              query={params.q}                                            // Change param.q to result.query if needed
+              termWeights={result.termWeights}                            // TODO: INTEGRATE (still using dummy data)
+              averagePrecision={result.averagePrecision}                  // TODO: INTEGRATE (still using dummy data)
+              documents={result.documents}                                // Done result showed
               color="blue"
             />
+
+            {/* TODO: Add expanded query panel for interactive mode */}
             <QueryResultPanel
               title="Expanded Query"
-              query={result.expandedQuery ?? ""}
-              termWeights={result.expandedTermWeights ?? {}}
-              averagePrecision={result.expandedMeanAveragePrecision}
-              documents={result.expandedDocuments ?? []}
+              query={result.expandedQuery ?? ""}                          // TODO: INTEGRATE (still using dummy data)
+              termWeights={result.expandedTermWeights ?? {}}              // TODO: INTEGRATE (still using dummy data)
+              averagePrecision={result.expandedaveragePrecision}          // TODO: INTEGRATE (still using dummy data)
+              documents={result.expandedDocuments ?? []}                  // TODO: INTEGRATE (still using dummy data)
               color="green"
             />
           </div>
@@ -205,35 +207,35 @@ export function Result({ result, params }: ResultProps) {
           // ✅ Wrap scrollable content + bottom bar in a container
           <div className="relative">
             {/* Scrollable Panel Content */}
-            <div className="space-y-6 max-h-[460px] overflow-y-auto px-4 pb-4">
+            <div className="space-y-6 max-h-[429px] overflow-y-auto px-4 pb-4">
               {result.results.map((item, idx) => (
                 <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="">
                     <QueryResultPanel
                       title={`Original Query #${idx + 1}`}
-                      query={item.query}
-                      termWeights={item.termWeights ?? {}}
-                      documents={item.documents}
+                      query={item.query}                                  // TODO: INTEGRATE (still using dummy data)
+                      termWeights={item.termWeights}                      // TODO: INTEGRATE (still using dummy data)
+                      documents={item.documents}                          // TODO: INTEGRATE (still using dummy data)
                       color="blue"
                       isBatch={true}
-                      averagePrecision={item.averagePrecision}
+                      averagePrecision={item.averagePrecision}            // TODO: INTEGRATE (still using dummy data)
                     />
                   </div>
 
                   <div className="">
                     <QueryResultPanel
                       title={`Expanded Query #${idx + 1}`}
-                      query={item.expandedQuery ?? "Expanded version not available"}
+                      query={item.expandedQuery ?? "Query Not Available"}       // TODO: INTEGRATE (still using dummy data)
                       termWeights={item.expandedTermWeights ?? {
                         information: 0.8,
                         retrieval: 0.7,
                         query: 0.6,
                         expansion: 0.5,
-                      }}
-                      documents={item.expandedDocuments ?? dummyExpandedDocs}
+                      }}                                                        // TODO: INTEGRATE (still using dummy data)
+                      documents={item.expandedDocuments ?? dummyExpandedDocs}   // TODO: INTEGRATE (still using dummy data)
                       color="green"
                       isBatch={true}
-                      averagePrecision={item.expandedAveragePrecision}
+                      averagePrecision={item.expandedAveragePrecision}          // TODO: INTEGRATE (still using dummy data)
                     />
                   </div>
                 </div>
@@ -243,12 +245,16 @@ export function Result({ result, params }: ResultProps) {
             {/* ✅ Bottom Summary Bar - Moved OUTSIDE scrollable container */}
             <div className="sticky bottom-0 left-0 right-0 z-10 bg-white border-t border-gray-300 p-4 shadow-inner">
               <div className="flex flex-col sm:flex-row justify-between items-center text-sm font-medium text-gray-800">
+
+                {/* TODO: INTEGRATE (still using dummy data) */}
                 <span>
                   Mean Average Precision (Original):{" "}
                   <span className="font-bold text-blue-700">
-                    {(result.meanAveragePrecision ?? 0).toFixed(4)}
+                    {(result.meanAveragePrecision ?? 0).toFixed(4)}   
                   </span>
                 </span>
+
+                {/* TODO: INTEGRATE (still using dummy data) */}
                 <span>
                   Mean Average Precision (Expanded):{" "}
                   <span className="font-bold text-green-700">
@@ -262,6 +268,7 @@ export function Result({ result, params }: ResultProps) {
                     ).toFixed(4)}
                   </span>
                 </span>
+
               </div>
             </div>
           </div>
