@@ -15,7 +15,8 @@ export default function Home() {
 
     try {
       const result = await fetchInteractiveSearch(params, false);
-      setSearchResult(result);
+      const result_expansion = await fetchInteractiveSearch(params, true);
+      setSearchResult({result: result, result_expansion: result_expansion});
     } catch (error) {
       console.error("Error fetching search result:", error);
     }
@@ -23,8 +24,9 @@ export default function Home() {
 
   const handleBatchSubmit = async (params: SearchParams, formData: FormData) => {
     try {
-      const result = await fetchBatchSearch(params, formData, false,);
-      setSearchResult(result);
+      const result = await fetchBatchSearch(params, formData, false);
+      const result_expansion = await fetchBatchSearch(params, formData, true);
+      setSearchResult({result: result, result_expansion: result_expansion});
     } catch (error) {
       console.error("Error in batch search:", error);
     }
@@ -43,7 +45,8 @@ export default function Home() {
           <div className="w-full">
             <Result
               selected={submittedParams?.q || ""}
-              result={searchResult}
+              result={searchResult?.result}
+              result_expansion={searchResult?.result_expansion}
               params={
                 submittedParams ?? {
                   q: "",
@@ -56,6 +59,9 @@ export default function Home() {
                   "config.do_stemming": false,
                   "config.do_remove_stop_words": false,
                   "config.do_inverted_file": false,
+                  "config.max_terms": 0,
+                  "config.window_size": 5,
+                  "config.mi_threshold": 5,
                   top_k: 0,
                 }
               }

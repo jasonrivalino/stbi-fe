@@ -39,6 +39,7 @@ type BatchResult = {
 type ResultProps = {
   selected: string;
   result: InteractiveResult | BatchResult | null;
+  result_expansion: InteractiveResult | BatchResult | null;
   params: {
     q: string;
     "weights.docs.tf": "n" | "l" | "a" | "b";
@@ -53,7 +54,6 @@ type ResultProps = {
     "config.max_terms": number;
     "config.window_size": number;
     "config.mi_threshold": number;
-    "config.do_query_expansion": boolean;
     top_k: number;
   };
 };
@@ -151,9 +151,11 @@ const QueryResultPanel = ({
   );
 }
 
-export function Result({ result, params }: ResultProps) {
-  const isInteractive = result && "documents" in result;
-  const isBatch = result && "results" in result;
+
+export function Result({ result, result_expansion, params }: ResultProps) {
+  const isInteractive = result && result_expansion && "documents" in result && "documents" in result_expansion;
+  const isBatch = result && result_expansion && "results" in result && "results" in result_expansion;
+
   const handleDownload = () => {
     const jsonString = JSON.stringify(result, null, 2); // pretty print with 2 spaces
     const blob = new Blob([jsonString], { type: "application/json" });
@@ -165,36 +167,6 @@ export function Result({ result, params }: ResultProps) {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-  }
-  // Dummy fallback for interactive mode (remove when integrating with real data)
-  if (isInteractive && result) {
-    if (!result.expandedQuery) {
-      result.expandedQuery = "dummy lorem ipsum expansion text";
-    }
-
-    if (!result.expandedTermWeights || Object.keys(result.expandedTermWeights).length === 0) {
-      result.expandedTermWeights = {
-        "information": 0.8,
-        "retrieval": 0.7,
-        "query": 0.6,
-        "expansion": 0.5,
-      };
-    }
-
-    if (!result.expandedDocuments || result.expandedDocuments.length === 0) {
-      result.expandedDocuments = [
-        {
-          title: "Expanded Doc 1",
-          content: "This document was added as a result of query expansion using semantic similarity.",
-          weight: 0.75,
-        },
-        {
-          title: "Expanded Doc 2",
-          content: "Expanded query helped find this document with related content.",
-          weight: 0.65,
-        },
-      ];
-    }
   }
 
   return (
@@ -242,13 +214,12 @@ export function Result({ result, params }: ResultProps) {
               params={params}
             />
 
-            {/* TODO: Add expanded query panel for interactive mode */}
             <QueryResultPanel
               title="Expanded Query"
-              query={result.expandedQuery ?? ""}                          // TODO: INTEGRATE (still using dummy data)
-              termWeights={result.expandedTermWeights ?? {}}              // TODO: INTEGRATE (still using dummy data)
-              averagePrecision={result.expandedaveragePrecision}          // TODO: INTEGRATE (still using dummy data)
-              documents={result.expandedDocuments ?? []}                  // TODO: INTEGRATE (still using dummy data)
+              query={params.q ?? ""}                          // TODO: INTEGRATE (still using dummy data)
+              termWeights={result_expansion.termWeights ?? {}}              // TODO: INTEGRATE (still using dummy data)
+              averagePrecision={result_expansion.averagePrecision}          // TODO: INTEGRATE (still using dummy data)
+              documents={result_expansion.documents ?? []}                  // TODO: INTEGRATE (still using dummy data)
               color="green"
               params={params}
             />
@@ -276,17 +247,17 @@ export function Result({ result, params }: ResultProps) {
                   <div className="">
                     <QueryResultPanel
                       title={`Expanded Query #${idx + 1}`}
-                      query={item.expandedQuery ?? "Query Not Available"}       // TODO: INTEGRATE (still using dummy data)
-                      termWeights={item.expandedTermWeights ?? {
+                      query={result_expansion.results[idx].query ?? "Query Not Available"}      // TODO: cleaner approach (optional)
+                      termWeights={result_expansion.results[idx].termWeights ?? {
                         information: 0.8,
                         retrieval: 0.7,
                         query: 0.6,
                         expansion: 0.5,
-                      }}                                                        // TODO: INTEGRATE (still using dummy data)
-                      documents={item.expandedDocuments ?? dummyExpandedDocs}   // TODO: INTEGRATE (still using dummy data)
+                      }}                                                                                 
+                      documents={result_expansion.results[idx].documents ?? dummyExpandedDocs}   
                       color="green"
                       isBatch={true}
-                      averagePrecision={item.expandedAveragePrecision}          // TODO: INTEGRATE (still using dummy data)
+                      averagePrecision={result_expansion.results[idx].averagePrecision}
                       params={params}
                     />
                   </div>
@@ -310,14 +281,7 @@ export function Result({ result, params }: ResultProps) {
                 <span>
                   Mean Average Precision (Expanded):{" "}
                   <span className="font-bold text-green-700">
-                    {(
-                      result.results.length > 0
-                        ? result.results.reduce(
-                            (acc, cur) => acc + (cur.expandedAveragePrecision ?? 0),
-                            0
-                          ) / result.results.length
-                        : 0
-                    ).toFixed(4)}
+                    {(result.meanAveragePrecision ?? 0).toFixed(4)}   
                   </span>
                 </span>
 
