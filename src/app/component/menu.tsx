@@ -520,20 +520,19 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
 
               {/* Query Weighting */}
               <div className="flex flex-row gap-7 mt-1">
-                <h2 className={`text-sm font-semibold ${!isInteractive ? 'text-gray-500' : 'text-white'}`}>
+                <h2 className={`text-sm font-semibold text-white`}>
                   Query Weighting:
                 </h2>
                 
                 {/* TF */}
                 <div className="flex flex-row justify-between items-center ml-auto">
-                  <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold ${!isInteractive ? 'text-gray-500' : 'text-white'}`}>
+                  <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold text-white`}>
                     TF
                   </h2>
                   <select
-                    className={`p-1 bg-gray-700 text-white rounded-md text-sm ${!isInteractive ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`p-1 bg-gray-700 text-white rounded-md text-sm`}
                     value={params['weights.query.tf']}
-                    onChange={(e) => isInteractive && updateParam('weights.query.tf', e.target.value as SearchParams['weights.query.tf'])}
-                    disabled={!isInteractive}
+                    onChange={(e) => updateParam('weights.query.tf', e.target.value as SearchParams['weights.query.tf'])}
                   >
                     <option value="l">Logarithmic</option>
                     <option value="b">Binary</option>
@@ -544,21 +543,19 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
 
                 {/* IDF */}
                 <div className="flex items-center justify-between">
-                  <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold ${!isInteractive ? 'text-gray-500' : 'text-white'}`}>
+                  <h2 className={`text-sm justify-center align-center text-center mr-2 font-semiboldtext-white`}>
                     IDF
                   </h2>
                   <label className="inline-flex items-center cursor-pointer relative">
                     <input
                       type="checkbox"
                       checked={isIDFQueryChecked}
-                      onChange={() => isInteractive && handleIDFQueryToggle()}
+                      onChange={() => handleIDFQueryToggle()}
                       className="sr-only peer"
-                      disabled={!isInteractive}
                     />
                     <div
                       className={`w-5 h-5 rounded-md relative transition-colors duration-300 flex items-center justify-center
-                        ${isInteractive ? 'bg-gray-300 peer-checked:bg-blue-500 cursor-pointer' : 'bg-gray-500 cursor-not-allowed'}
-                      `}
+                        bg-gray-300 peer-checked:bg-blue-500 cursor-pointer`}
                     >
                       {isIDFQueryChecked && (
                         <span className="text-white text-xs font-bold">✔</span>
@@ -569,21 +566,19 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
 
                 {/* Cosine */}
                 <div className="flex items-center justify-between">
-                  <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold ${!isInteractive ? 'text-gray-500' : 'text-white'}`}>
+                  <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold text-white`}>
                     Cosine
                   </h2>
                   <label className="inline-flex items-center cursor-pointer relative">
                     <input
                       type="checkbox"
                       checked={isCosineQueryChecked}
-                      onChange={() => isInteractive && handleCosineQueryToggle()}
+                      onChange={() => handleCosineQueryToggle()}
                       className="sr-only peer"
-                      disabled={!isInteractive}
                     />
                     <div
                       className={`w-5 h-5 rounded-md relative transition-colors duration-300 flex items-center justify-center
-                        ${isInteractive ? 'bg-gray-300 peer-checked:bg-blue-500 cursor-pointer' : 'bg-gray-500 cursor-not-allowed'}
-                      `}
+                        bg-gray-300 peer-checked:bg-blue-500 cursor-pointer`}
                     >
                       {isCosineQueryChecked && (
                         <span className="text-white text-xs font-bold">✔</span>
