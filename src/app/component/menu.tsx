@@ -290,10 +290,10 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
   };
 
   return (
-    <div className="py-5 px-4 border rounded-xl text-white bg-gray-800 shadow-lg w-full">
+    <div className="pt-4 pb-8 px-4 border rounded-xl text-white bg-gray-800 shadow-lg w-full">
       <div className="flex flex-row gap-5">
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-row justify-between items-center pb-4 border-b-2">
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-row justify-between items-center pb-2 border-b-2">
 
             {/* Stemming Toggle */}
             <div className="flex items-center gap-3">
@@ -391,7 +391,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
           </div>
           
           {/* Terms */}
-          <div className="flex flex-row w-full pt-4 border-t-2 justify-between items-center">
+          <div className="flex flex-row w-full pt-2 border-t-2 justify-between items-center">
             {/* Max Terms */}
             <div className="flex items-center gap-3 w-full">
               <h2 className="text-base font-semibold mt-[0.125rem]">Max Terms:</h2>
@@ -431,16 +431,18 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                 </label>
               </div>
             </div>
+          
           {/* Thesaurus Options */}
-          <div className="flex flex-col w-full pt-2 border-t-2 justify-between">
+          <div className="flex flex-row w-full pt-2 border-t-2 align-middle justify-between items-center">
             <h2 className="text-base font-semibold">Thesaurus Options:</h2>
-            <div className="grid grid-cols-2 pt-2 gap-4 w-full">
+
+            <div className="flex flex-row gap-5 items-center">
               {/* Window Size */}
-              <div className="flex items-center gap-3 w-full">
-                <h2 className="text-base font-semibold mt-[0.125rem]">Window Size:</h2>
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-semibold">Window Size:</label>
                 <input
                   type="number"
-                  className="p-1 bg-gray-700 text-white rounded-md text-sm w-20"
+                  className="p-1 bg-gray-700 text-white rounded-md text-sm w-[3.5rem]"
                   placeholder="Enter"
                   min={1}
                   onKeyPress={(event) => {
@@ -454,11 +456,11 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
               </div>
 
               {/* MI Threshold */}
-              <div className="flex items-center gap-3 w-full">
-                <h2 className="text-base font-semibold mt-[0.125rem]">MI Threshold:</h2>
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-semibold">MI Threshold:</label>
                 <input
                   type="number"
-                  className="p-1 bg-gray-700 text-white rounded-md text-sm w-20"
+                  className="p-1 bg-gray-700 text-white rounded-md text-sm w-[3.5rem]"
                   placeholder="Enter"
                   min={1}
                   onChange={(e) => setMiThreshold(Number(e.target.value))}
@@ -466,18 +468,15 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                 />
               </div>
             </div>
-
           </div>
-        {/* Add vertical line separator */}
-        {/* <div className="border-1 border-white h-auto"></div> */}
 
           {/* Query Method */}
-          <div className="flex flex-col gap-2 w-full justify-center align-middle pt-4 pb-6 border-y-2">
+          <div className="flex flex-col gap-2 w-full justify-center align-middle pt-2 pb-4 border-y-2">
             <div className="flex items-center justify-between">
               <h2 className="text-base font-semibold">Query Method:</h2>
               {/* Add Checkboxed for Inverted Document */}
               <div className="flex items-center">
-                <h2 className="text-xs font-semibold mr-3 text-white">
+                <h2 className="text-sm font-semibold mr-3 text-white">
                   Inverted Document:
                 </h2>
                 <label className="inline-flex items-center cursor-pointer relative">
@@ -594,7 +593,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
               </div>
 
               {/* Batch */}
-              <label className="inline-flex items-center cursor-pointer relative mt-4">
+              <label className="inline-flex items-center cursor-pointer relative mt-2">
                 <input
                   type="radio"
                   name="queryMethod"
@@ -661,7 +660,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
       {/* Submit Button */}
       <button
         onClick={handleFormSubmit}
-        className="mt-6 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 w-full transition-colors duration-300"
+        className="mt-7 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 w-full transition-colors duration-300"
       >
         Submit
       </button>

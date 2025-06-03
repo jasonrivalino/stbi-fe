@@ -199,9 +199,21 @@ export function Result({ result, params }: ResultProps) {
 
   return (
     <div className={`${isBatch ? "" : "p-4"} border rounded-md bg-gray-100 h-full shadow-lg`}>
-      <h1 className={`text-xl font-bold text-black text-center ${isBatch ? "py-4" : ""}`}>
-        Document Rank Result
-      </h1>
+      <div className="flex justify-between items-center">
+        <h1 className={`text-xl font-bold text-black text-center ${isBatch ? "py-4" : ""}`}>
+          Document Rank Result
+        </h1>
+
+        {(isInteractive && result?.documents?.length > 0) || 
+        (isBatch && result?.results?.length > 0) ? (
+          <button
+            onClick={handleDownload}
+            className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 w-1/5 transition-colors duration-300 text-xs"
+          >
+            Download JSON result
+          </button>
+        ) : null}
+      </div>
 
       {params['config.do_inverted_file'] && (
         <div className="bg-white p-2 rounded-md shadow-sm mt-4 text-black">
@@ -313,15 +325,9 @@ export function Result({ result, params }: ResultProps) {
             </div>
           </div>
         ) : (
-          <p className="text-gray-500 italic">No results available yet.</p>
+          <p className="text-gray-500 italic mt-2">No results available yet.</p>
         )}
       </section>
-      <button
-        onClick={handleDownload}
-        className="mt-6 px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 w-full transition-colors duration-300"
-      >
-        Download
-      </button>
     </div>
   );
 }
