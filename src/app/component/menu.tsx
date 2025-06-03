@@ -17,7 +17,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
   const [isIDFQueryChecked, setIsIDFQueryChecked] = useState(false);
   const [isCosineQueryChecked, setIsCosineQueryChecked] = useState(false);
   const [query, setQuery] = useState('');
-  const [topK, setTopK] = useState(0);
+  const [maxTerms, setMaxTerms] = useState(0);
   const [windowSize, setWindowSize] = useState(5);
   const [miThreshold, setMiThreshold] = useState(5);
 
@@ -55,7 +55,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
     // const idfDocsInactive = !isIDFDocumentChecked;
     // const cosineDocsInactive = !isCosineDocumentChecked;
 
-    // const maxTerms = topK >= 0;
+    // const maxTerms = maxTerms >= 0;
 
     // if (tfDocsInactive && idfDocsInactive && cosineDocsInactive) {
     //   alert('Please select at least one document weighting method (TF, IDF, or Cosine) for the documents.');
@@ -93,7 +93,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
         q: query,
         'config.window_size': windowSize,
         'config.mi_threshold': miThreshold,
-        top_k: topK,
+        top_k: maxTerms,
       };
 
       setParams(updatedParams);
@@ -377,8 +377,8 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                     event.preventDefault();
                   }
                 }}
-                value={topK}
-                onChange={(e) => setTopK(Number(e.target.value))}
+                value={maxTerms}
+                onChange={(e) => setMaxTerms(Number(e.target.value))}
               />
             </div>
 
