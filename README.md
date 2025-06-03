@@ -29,7 +29,7 @@
         <td>13521170</td>
     </tr>
     <tr>
-        <td>4.</td>
+        <td>5.</td>
         <td>Dewana Gustavus Haraka Otang</td>
         <td>13521173</td>
     </tr>
@@ -64,11 +64,11 @@ git clone https://github.com/jasonrivalino/stbi-fe
 ```
 npm install
 ```
-4. Membuat file .env pada root folder dari program
+3. Membuat file .env pada root folder dari program
 ```
 NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
 ```
-5. Menjalankan Frontend dengan command berikut
+4. Menjalankan Frontend dengan command berikut
 ```
 npm run dev
 ```
