@@ -55,17 +55,17 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
     // const idfDocsInactive = !isIDFDocumentChecked;
     // const cosineDocsInactive = !isCosineDocumentChecked;
 
-    const maxTerms = topK > 0;
+    // const maxTerms = topK >= 0;
 
     // if (tfDocsInactive && idfDocsInactive && cosineDocsInactive) {
     //   alert('Please select at least one document weighting method (TF, IDF, or Cosine) for the documents.');
     //   return;
     // }
 
-    if (!maxTerms) {
-      alert('Please enter a valid number for Max Terms.');
-      return;
-    }
+    // if (!maxTerms) {
+    //   alert('Please enter a valid number for Max Terms.');
+    //   return;
+    // }
 
     if (!selectedOption) {
       alert("Please select a query method: Interactive or Batch.");
@@ -371,12 +371,13 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                 type="number"
                 className="p-1 bg-gray-700 text-white rounded-md text-sm w-20"
                 placeholder="Enter"
-                min={1}
+                min={0}
                 onKeyPress={(event) => {
                   if (!/[0-9]/.test(event.key)) {
                     event.preventDefault();
                   }
                 }}
+                value={topK}
                 onChange={(e) => setTopK(Number(e.target.value))}
               />
             </div>
@@ -418,6 +419,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                     }
                   }}
                   onChange={(e) => setWindowSize(Number(e.target.value))}
+                  value={windowSize}
                 />
               </div>
 
@@ -430,6 +432,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                   placeholder="Enter"
                   min={1}
                   onChange={(e) => setMiThreshold(Number(e.target.value))}
+                  value={miThreshold}
                 />
               </div>
             </div>
