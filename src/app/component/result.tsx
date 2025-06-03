@@ -82,6 +82,7 @@ const QueryResultPanel = ({
   color = "blue",
   isBatch = false,
   params,
+  selectedDoc,
   onClick,
 }: {
   title: string;
@@ -92,13 +93,14 @@ const QueryResultPanel = ({
   color?: "blue" | "green";
   isBatch?: boolean;
   params: ResultProps["params"];
+  selectedDoc?: string;
   onClick?: (title: string, content: string) => void;
 }) => {
   const renderDocumentCard = (doc: Document, index: number) => (
     <div
-    onClick={() => onClick?.(doc.title, doc.content)}
+      onClick={() => onClick?.(doc.title, doc.content)}
       key={index}
-      className="bg-gray-100 p-2 border rounded-md shadow-sm hover:shadow-md transition-shadow duration-200"
+      className="relative group bg-gray-100 p-2 border rounded-md shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
     >
       <div className="mb-4 space-y-1">
         <h3 className="font-bold text-sm text-blue-700">
@@ -120,8 +122,8 @@ const QueryResultPanel = ({
       className={`overflow-y-auto ${
         isBatch
           ? ""
-          : params['config.do_inverted_file']
-          ? "max-h-[300px]"
+          : selectedDoc
+          ? "max-h-[310px]"
           : "max-h-[460px]"
       } ${bgColor} p-4 rounded-md shadow-md space-y-4`}
     >
@@ -221,18 +223,15 @@ export function Result({ result, result_expansion, params }: ResultProps) {
         ) : null}
       </div>
 
-      {selectDoc != "" && (
+      {selectDoc !== "" && (
         <div className="bg-white p-2 rounded-md shadow-sm mt-4 text-black">
           <h2 className="text-sm font-semibold mb-2">Nama Dokumen: {selectDoc}</h2>
           <p className="text-sm font-semibold">Inverted File Information:</p>
-          {/* TODO: Synchronize with inverted data information */}
-          <ul className="list-disc list-inside text-sm mt-1 max-h-10 overflow-y-auto">
-            {Object.entries(contentselectDoc).map(([term, tf]) => (
-              <li key={term}>
-                <strong>{term}:</strong> {String(tf)}
-              </li>
-            ))}
-          </ul>
+          <p className="text-sm mt-1 max-h-16 overflow-y-auto">
+            {Object.entries(contentselectDoc)
+              .map(([term, tf]) => `${term} (${String(tf)})`)
+              .join(', ')}
+          </p>
         </div>
       )}
 
@@ -251,6 +250,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
               color="blue"
               params={params}
               onClick={countandsetTerm}
+              selectedDoc={selectDoc}
             />
 
             <QueryResultPanel
@@ -265,6 +265,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
               color="green"
               params={params}
               onClick={countandsetTerm}
+              selectedDoc={selectDoc}
             />
           </div>
         ) : isBatch && result.results.length > 0 ? (
@@ -288,6 +289,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
                       averagePrecision={item.ap_score}            // TODO: INTEGRATE (still using dummy data)
                       params={params}
                       onClick={countandsetTerm}
+                      selectedDoc={selectDoc}
                     />
                   </div>
 
@@ -305,6 +307,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
                       averagePrecision={result_expansion.results[idx].ap_score}
                       params={params}
                       onClick={countandsetTerm}
+                      selectedDoc={selectDoc}
                     />
                   </div>
                 </div>
