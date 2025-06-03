@@ -120,6 +120,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
       }
       const updatedParams = {
         ...params,
+        'config.max_terms': isAddAllTermsChecked ? -1 : maxTerms,
         'config.window_size': windowSize,
         'config.mi_threshold': miThreshold,
         top_k: 10
