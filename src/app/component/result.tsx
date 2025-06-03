@@ -19,7 +19,14 @@ type InteractiveResult = {
   expandedTermWeights: { [term: string]: number };
   expandedQuery: string;
   expandedaveragePrecision?: number;
+  query_weight? : QueryWeight[];
 };
+
+type QueryWeight = {
+  term: string;
+  weight: number;
+}
+
 
 type BatchResult = {
   meanAveragePrecision: number; // Mean AP across all queries
@@ -33,6 +40,7 @@ type BatchResult = {
     expandedAveragePrecision?: number;
     expandedDocuments: Document[];
     expandedTermWeights: { [term: string]: number };
+    query_weight? : QueryWeight[];
   }[];
 };
 
@@ -157,7 +165,11 @@ export function Result({ result, result_expansion, params }: ResultProps) {
   const isBatch = result && result_expansion && "results" in result && "results" in result_expansion;
 
   const handleDownload = () => {
-    const jsonString = JSON.stringify(result, null, 2); // pretty print with 2 spaces
+    var hasil ={
+      result,
+      result_expansion,
+    }
+    const jsonString = JSON.stringify(hasil, null, 2); // pretty print with 2 spaces
     const blob = new Blob([jsonString], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -216,8 +228,11 @@ export function Result({ result, result_expansion, params }: ResultProps) {
 
             <QueryResultPanel
               title="Expanded Query"
-              query={params.q ?? ""}                          // TODO: INTEGRATE (still using dummy data)
-              termWeights={result_expansion.termWeights ?? {}}              // TODO: INTEGRATE (still using dummy data)
+              query={result_expansion.query_weight?.map(item => item.term).join(' ') ?? ""} 
+              termWeights={result_expansion.query_weight?.reduce<Record<string, number>>((acc, item) => {
+              acc[item.term] = item.weight;
+              return acc;
+              }, {}) ?? {}}              // TODO: INTEGRATE (still using dummy data)
               averagePrecision={result_expansion.averagePrecision}          // TODO: INTEGRATE (still using dummy data)
               documents={result_expansion.documents ?? []}                  // TODO: INTEGRATE (still using dummy data)
               color="green"
@@ -247,13 +262,11 @@ export function Result({ result, result_expansion, params }: ResultProps) {
                   <div className="">
                     <QueryResultPanel
                       title={`Expanded Query #${idx + 1}`}
-                      query={result_expansion.results[idx].query ?? "Query Not Available"}      // TODO: cleaner approach (optional)
-                      termWeights={result_expansion.results[idx].termWeights ?? {
-                        information: 0.8,
-                        retrieval: 0.7,
-                        query: 0.6,
-                        expansion: 0.5,
-                      }}                                                                                 
+                      query={result_expansion.results[idx].query_weight?.map(item => item.term).join(' ') ?? "Query Not Available"}      // TODO: cleaner approach (optional)
+                      termWeights={result_expansion.results[idx].query_weight?.reduce<Record<string, number>>((acc, item) => {
+                      acc[item.term] = item.weight;
+                      return acc;
+                      }, {}) ?? {}}                                                                                 
                       documents={result_expansion.results[idx].documents ?? dummyExpandedDocs}   
                       color="green"
                       isBatch={true}

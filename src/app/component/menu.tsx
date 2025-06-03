@@ -122,7 +122,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
         ...params,
         'config.window_size': windowSize,
         'config.mi_threshold': miThreshold,
-        top_k: maxTerms,
+        top_k: 10
       };
 
       const formData = new FormData();
