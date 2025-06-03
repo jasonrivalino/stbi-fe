@@ -18,6 +18,8 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
   const [isCosineQueryChecked, setIsCosineQueryChecked] = useState(false);
   const [query, setQuery] = useState('');
   const [topK, setTopK] = useState(0);
+  const [windowSize, setWindowSize] = useState(5);
+  const [miThreshold, setMiThreshold] = useState(5);
 
   const [selectedOption, setSelectedOption] = useState('');
   const isInteractive = selectedOption === 'interactive';
@@ -89,6 +91,8 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
       const updatedParams = {
         ...params,
         q: query,
+        'config.window_size': windowSize,
+        'config.mi_threshold': miThreshold,
         top_k: topK,
       };
 
@@ -391,6 +395,37 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
               </div>
             </div>
 
+          {/* Thesaurus Options */}
+          <div className="flex flex-col w-full pt-2 border-t-2 justify-between">
+            <h2 className="text-base font-semibold">Thesaurus Options:</h2>
+            <div className="grid grid-cols-2 pt-2 gap-4 w-full">
+              {/* Window Size */}
+              <div className="flex items-center gap-3 w-full">
+                <h2 className="text-base font-semibold mt-[0.125rem]">Window Size:</h2>
+                <input
+                  type="number"
+                  className="p-1 bg-gray-700 text-white rounded-md text-sm w-20"
+                  placeholder="Enter"
+                  min={1}
+                  onChange={(e) => setWindowSize(Number(e.target.value))}
+                />
+              </div>
+
+              {/* MI Threshold */}
+              <div className="flex items-center gap-3 w-full">
+                <h2 className="text-base font-semibold mt-[0.125rem]">MI Threshold:</h2>
+                <input
+                  type="number"
+                  className="p-1 bg-gray-700 text-white rounded-md text-sm w-20"
+                  placeholder="Enter"
+                  min={1}
+                  onChange={(e) => setMiThreshold(Number(e.target.value))}
+                />
+              </div>
+            </div>
+
+          </div>
+            
         {/* Add vertical line separator */}
         {/* <div className="border-1 border-white h-auto"></div> */}
 
