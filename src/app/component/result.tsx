@@ -294,7 +294,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
                 <span>
                   Mean Average Precision (Expanded):{" "}
                   <span className="font-bold text-green-700">
-                    {(result.map_score ?? 0).toFixed(4)}   
+                    {(result_expansion.map_score ?? 0).toFixed(4)}   
                   </span>
                 </span>
 
