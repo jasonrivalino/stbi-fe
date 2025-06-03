@@ -36,6 +36,9 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
     'weights.query.norm': 'n',
     'config.do_stemming': false,
     'config.do_remove_stop_words': false,
+    'config.max_terms': 5,
+    'config.window_size': 5,
+    'config.mi_threshold': 4,
     top_k: 0,
   });
 
