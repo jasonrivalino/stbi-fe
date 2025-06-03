@@ -614,7 +614,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                   </label>
                   <input
                     type="file"
-                    accept=".txt, .csv"
+                    accept="*"
                     disabled={!isBatch}
                     className={`p-1 bg-gray-700 text-white rounded-md text-xs border border-gray-600 transition-colors duration-200 cursor-pointer
                       ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}
@@ -629,7 +629,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                   </label>
                   <input
                     type="file"
-                    accept=".txt, .csv"
+                    accept="*"
                     disabled={!isBatch}
                     className={`p-1 bg-gray-700 text-white rounded-md text-xs border border-gray-600 transition-colors duration-200 cursor-pointer
                       ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}
@@ -644,7 +644,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                   </label>
                   <input
                     type="file"
-                    accept=".txt, .csv"
+                    accept="*"
                     disabled={!isBatch}
                     className={`p-1 bg-gray-700 text-white rounded-md text-xs border border-gray-600 transition-colors duration-200 cursor-pointer
                       ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}                    
