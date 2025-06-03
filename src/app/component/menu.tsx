@@ -16,7 +16,9 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
   const [isAddAllTermsChecked, setIsAddAllTermsChecked] = useState(false);
   const [isIDFQueryChecked, setIsIDFQueryChecked] = useState(false);
   const [isCosineQueryChecked, setIsCosineQueryChecked] = useState(false);
+  const [isInvertedDocumentChecked, setIsInvertedDocumentChecked] = useState(false);
   const [query, setQuery] = useState('');
+  const [topK, setTopK] = useState(0);
   const [maxTerms, setMaxTerms] = useState(0);
   const [windowSize, setWindowSize] = useState(5);
   const [miThreshold, setMiThreshold] = useState(5);
@@ -38,9 +40,11 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
     'weights.query.norm': 'n',
     'config.do_stemming': false,
     'config.do_remove_stop_words': false,
+    'config.do_inverted_file': false,
     'config.max_terms': 5,
     'config.window_size': 5,
     'config.mi_threshold': 4,
+    'config.do_query_expansion': false,
     top_k: -1,
   });
 
@@ -71,6 +75,11 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
       alert("Please select a query method: Interactive or Batch.");
       return;
     }
+
+    // if (isInvertedDocumentChecked && !documentFile) {
+    //   alert("Please upload a document file to view the inverted file content.");
+    //   return;
+    // }
 
     // === INTERACTIVE mode validations ===
     if (selectedOption === 'interactive') {
@@ -109,7 +118,6 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
         alert("Please upload all required batch files: Query, Document, and Relevance Judgement.");
         return;
       }
-
       const updatedParams = {
         ...params,
         'config.window_size': windowSize,
@@ -126,8 +134,6 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
       onSubmitBatch(updatedParams,formData);
     }
   };
-
-
 
   // Handlers for toggle switches
   // These handlers update the state and call the updateParam function to set the corresponding parameter
@@ -175,6 +181,20 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
       updateParam('weights.docs.idf', 'n');
     }
   };
+
+  const handleInvertedDocumentToggle = () => {
+    const newValue = !isInvertedDocumentChecked;
+    setIsInvertedDocumentChecked(newValue);
+    if (newValue) {
+      // Handling checked state
+      console.log("🔍 Inverted Document is checked");
+      updateParam('config.do_inverted_file', true);
+    } else {
+      // Handling unchecked state
+      console.log("❌ Inverted Document is unchecked");
+      updateParam('config.do_inverted_file', false);
+    }
+  }
 
   const handleCosineDocumentToggle = () => {
     const newValue = !isCosineDocumentChecked;
@@ -411,7 +431,6 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                 </label>
               </div>
             </div>
-
           {/* Thesaurus Options */}
           <div className="flex flex-col w-full pt-2 border-t-2 justify-between">
             <h2 className="text-base font-semibold">Thesaurus Options:</h2>
@@ -449,13 +468,33 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
             </div>
 
           </div>
-            
         {/* Add vertical line separator */}
         {/* <div className="border-1 border-white h-auto"></div> */}
 
           {/* Query Method */}
           <div className="flex flex-col gap-2 w-full justify-center align-middle pt-4 pb-6 border-y-2">
-            <h2 className="text-base font-semibold">Query Method:</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-base font-semibold">Query Method:</h2>
+              {/* Add Checkboxed for Inverted Document */}
+              <div className="flex items-center">
+                <h2 className="text-xs font-semibold mr-3 text-white">
+                  Inverted Document:
+                </h2>
+                <label className="inline-flex items-center cursor-pointer relative">
+                  <input
+                    type="checkbox"
+                    checked={isInvertedDocumentChecked}
+                    onChange={handleInvertedDocumentToggle}
+                    className="sr-only peer"
+                  />
+                  <div className="w-4 h-4 bg-gray-300 rounded-md relative transition-colors duration-300 peer-checked:bg-blue-500 flex items-center justify-center">
+                    {isInvertedDocumentChecked && (
+                      <span className="text-white text-xs font-bold">✔</span>
+                    )}
+                  </div>
+                </label>
+              </div>
+            </div>
             <div className="flex flex-col gap-2 w-full">
               {/* Interactive */}
               <label className="inline-flex items-center cursor-pointer relative">

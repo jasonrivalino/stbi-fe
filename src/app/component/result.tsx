@@ -49,6 +49,11 @@ type ResultProps = {
     "weights.query.norm": "n" | "c";
     "config.do_stemming": boolean;
     "config.do_remove_stop_words": boolean;
+    "config.do_inverted_file": boolean;
+    "config.max_terms": number;
+    "config.window_size": number;
+    "config.mi_threshold": number;
+    "config.do_query_expansion": boolean;
     top_k: number;
   };
 };
@@ -67,6 +72,7 @@ const QueryResultPanel = ({
   documents,
   color = "blue",
   isBatch = false,
+  params,
 }: {
   title: string;
   query: string;
@@ -74,7 +80,8 @@ const QueryResultPanel = ({
   averagePrecision?: number;
   documents: Document[];
   color?: "blue" | "green";
-  isBatch?: boolean; // <-- Add this line
+  isBatch?: boolean;
+  params: ResultProps["params"];
 }) => {
   const renderDocumentCard = (doc: Document, index: number) => (
     <div
@@ -98,10 +105,14 @@ const QueryResultPanel = ({
 
   return (
       <div
-        className={`overflow-y-auto ${
-          isBatch ? "" : "max-h-[460px]"
-        } ${bgColor} p-4 rounded-md shadow-md space-y-4`}
-      >
+      className={`overflow-y-auto ${
+        isBatch
+          ? ""
+          : params['config.do_inverted_file']
+          ? "max-h-[300px]"
+          : "max-h-[460px]"
+      } ${bgColor} p-4 rounded-md shadow-md space-y-4`}
+    >
       <div className="bg-white p-2 rounded-md shadow-sm">
         <h2 className="text-sm font-semibold text-black mb-1">{title}</h2>
         <p className={`text-sm ${queryColor}`}>{query}</p>
@@ -143,7 +154,6 @@ const QueryResultPanel = ({
 export function Result({ result, params }: ResultProps) {
   const isInteractive = result && "documents" in result;
   const isBatch = result && "results" in result;
-
   const handleDownload = () => {
     const jsonString = JSON.stringify(result, null, 2); // pretty print with 2 spaces
     const blob = new Blob([jsonString], { type: "application/json" });
@@ -156,7 +166,6 @@ export function Result({ result, params }: ResultProps) {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   }
-  
   // Dummy fallback for interactive mode (remove when integrating with real data)
   if (isInteractive && result) {
     if (!result.expandedQuery) {
@@ -194,6 +203,20 @@ export function Result({ result, params }: ResultProps) {
         Document Rank Result
       </h1>
 
+      {params['config.do_inverted_file'] && (
+        <div className="bg-white p-2 rounded-md shadow-sm mt-4 text-black">
+          <h2 className="text-sm font-semibold mb-2">Nama Dokumen: Doc5.txt</h2>
+          <p className="text-sm font-semibold">Inverted File Information:</p>
+          {/* TODO: Synchronize with inverted data information */}
+          <ul className="list-disc list-inside text-sm mt-1">
+            <li><strong>information:</strong> tf = 3, df = 12, idf = 1.234, weight = 3.702</li>
+            <li><strong>retrieval:</strong> tf = 2, df = 10, idf = 1.321, weight = 2.642</li>
+            <li><strong>data:</strong> tf = 1, df = 20, idf = 0.980, weight = 0.980</li>
+            <li><strong>indexing:</strong> tf = 4, df = 5, idf = 1.699, weight = 6.796</li>
+          </ul>
+        </div>
+      )}
+
       <section>
         {isInteractive && result ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -204,6 +227,7 @@ export function Result({ result, params }: ResultProps) {
               averagePrecision={result.averagePrecision}                  // TODO: INTEGRATE (still using dummy data)
               documents={result.documents}                                // Done result showed
               color="blue"
+              params={params}
             />
 
             {/* TODO: Add expanded query panel for interactive mode */}
@@ -214,6 +238,7 @@ export function Result({ result, params }: ResultProps) {
               averagePrecision={result.expandedaveragePrecision}          // TODO: INTEGRATE (still using dummy data)
               documents={result.expandedDocuments ?? []}                  // TODO: INTEGRATE (still using dummy data)
               color="green"
+              params={params}
             />
           </div>
         ) : isBatch && result.results.length > 0 ? (
@@ -232,6 +257,7 @@ export function Result({ result, params }: ResultProps) {
                       color="blue"
                       isBatch={true}
                       averagePrecision={item.averagePrecision}            // TODO: INTEGRATE (still using dummy data)
+                      params={params}
                     />
                   </div>
 
@@ -249,6 +275,7 @@ export function Result({ result, params }: ResultProps) {
                       color="green"
                       isBatch={true}
                       averagePrecision={item.expandedAveragePrecision}          // TODO: INTEGRATE (still using dummy data)
+                      params={params}
                     />
                   </div>
                 </div>

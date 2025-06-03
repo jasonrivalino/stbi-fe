@@ -8,9 +8,11 @@ export type SearchParams = {
   'weights.query.norm': 'n' | 'c';
   'config.do_stemming': boolean;
   'config.do_remove_stop_words': boolean;
+  'config.do_inverted_file': boolean;
   'config.max_terms': number;
   'config.window_size': number;
   'config.mi_threshold': number;
+  'config.do_query_expansion': boolean;
   top_k: number;
 };
 
@@ -25,6 +27,7 @@ export async function fetchInteractiveSearch(params: SearchParams, expand_query 
     'weights.query.norm': params['weights.query.norm'],
     'config.do_stemming': String(params['config.do_stemming']),
     'config.do_remove_stop_words': String(params['config.do_remove_stop_words']),
+    'config.do_inverted_file': String(params['config.do_inverted_file']),
     'config.max_terms': String(params['config.max_terms']),
     'config.window_size': String(params['config.window_size']),
     'config.mi_threshold': String(params['config.mi_threshold']),

@@ -21,7 +21,6 @@ export default function Home() {
     }
   };
 
-  // Note: ugly casting from SearchParams to BatchParams
   const handleBatchSubmit = async (params: SearchParams, formData: FormData) => {
     try {
       const result = await fetchBatchSearch(params, formData, false,);
@@ -56,6 +55,7 @@ export default function Home() {
                   "weights.query.norm": "n",
                   "config.do_stemming": false,
                   "config.do_remove_stop_words": false,
+                  "config.do_inverted_file": false,
                   top_k: 0,
                 }
               }
