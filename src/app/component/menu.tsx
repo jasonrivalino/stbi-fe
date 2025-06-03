@@ -114,7 +114,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
 
     // === BATCH mode validations ===
     if (selectedOption === 'batch') {
-      if (!queryFile || !documentFile || !relevanceFile) {
+      if (!queryFile || !relevanceFile) {
         alert("Please upload all required batch files: Query, Document, and Relevance Judgement.");
         return;
       }
@@ -476,7 +476,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
             <div className="flex items-center justify-between">
               <h2 className="text-base font-semibold">Query Method:</h2>
               {/* Add Checkboxed for Inverted Document */}
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <h2 className="text-sm font-semibold mr-3 text-white">
                   Inverted Document:
                 </h2>
@@ -493,7 +493,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                     )}
                   </div>
                 </label>
-              </div>
+              </div> */}
             </div>
             <div className="flex flex-col gap-2 w-full">
               {/* Interactive */}
@@ -624,7 +624,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                 </div>
 
                 {/* Document file */}
-                <div className="flex flex-col">
+                {/* <div className="flex flex-col">
                   <label className={`text-xs font-medium mb-1 ${!isBatch ? 'text-gray-500' : 'text-white'}`}>
                     Document File
                   </label>
@@ -636,7 +636,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                       ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}
                     onChange={(e) => handleDocumentFileUpload(e)}
                   />
-                </div>
+                </div> */}
 
                 {/* Relevance Judgment file */}
                 <div className="flex flex-col">
