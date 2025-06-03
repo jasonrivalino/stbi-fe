@@ -29,10 +29,10 @@ type QueryWeight = {
 
 
 type BatchResult = {
-  meanAveragePrecision: number; // Mean AP across all queries
+  map_score: number; // Mean AP across all queries
   results: {
     query: string;
-    averagePrecision: number;
+    ap_score: number;
     documents: Document[];
     termWeights: { [term: string]: number };
 
@@ -254,7 +254,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
                       documents={item.documents}                          // TODO: INTEGRATE (still using dummy data)
                       color="blue"
                       isBatch={true}
-                      averagePrecision={item.averagePrecision}            // TODO: INTEGRATE (still using dummy data)
+                      averagePrecision={item.ap_score}            // TODO: INTEGRATE (still using dummy data)
                       params={params}
                     />
                   </div>
@@ -270,7 +270,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
                       documents={result_expansion.results[idx].documents ?? dummyExpandedDocs}   
                       color="green"
                       isBatch={true}
-                      averagePrecision={result_expansion.results[idx].averagePrecision}
+                      averagePrecision={result_expansion.results[idx].ap_score}
                       params={params}
                     />
                   </div>
@@ -286,7 +286,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
                 <span>
                   Mean Average Precision (Original):{" "}
                   <span className="font-bold text-blue-700">
-                    {(result.meanAveragePrecision ?? 0).toFixed(4)}   
+                    {(result.map_score ?? 0).toFixed(4)}   
                   </span>
                 </span>
 
@@ -294,7 +294,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
                 <span>
                   Mean Average Precision (Expanded):{" "}
                   <span className="font-bold text-green-700">
-                    {(result.meanAveragePrecision ?? 0).toFixed(4)}   
+                    {(result.map_score ?? 0).toFixed(4)}   
                   </span>
                 </span>
 
