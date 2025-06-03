@@ -372,6 +372,11 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                 className="p-1 bg-gray-700 text-white rounded-md text-sm w-20"
                 placeholder="Enter"
                 min={1}
+                onKeyPress={(event) => {
+                  if (!/[0-9]/.test(event.key)) {
+                    event.preventDefault();
+                  }
+                }}
                 onChange={(e) => setTopK(Number(e.target.value))}
               />
             </div>
@@ -407,6 +412,11 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                   className="p-1 bg-gray-700 text-white rounded-md text-sm w-20"
                   placeholder="Enter"
                   min={1}
+                  onKeyPress={(event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
                   onChange={(e) => setWindowSize(Number(e.target.value))}
                 />
               </div>
