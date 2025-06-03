@@ -41,7 +41,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
     'config.max_terms': 5,
     'config.window_size': 5,
     'config.mi_threshold': 4,
-    top_k: 0,
+    top_k: -1,
   });
 
   // Function to update parameters
@@ -91,9 +91,10 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
       const updatedParams = {
         ...params,
         q: query,
+        'config.max_terms': isAddAllTermsChecked ? -1 : maxTerms,
         'config.window_size': windowSize,
         'config.mi_threshold': miThreshold,
-        top_k: maxTerms,
+        top_k: -1,
       };
 
       setParams(updatedParams);
@@ -369,7 +370,10 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
               <h2 className="text-base font-semibold mt-[0.125rem]">Max Terms:</h2>
               <input
                 type="number"
-                className="p-1 bg-gray-700 text-white rounded-md text-sm w-20"
+                disabled={isAddAllTermsChecked}
+                className={`p-1 bg-gray-700 text-white rounded-md text-sm w-20
+                  ${isAddAllTermsChecked ? 'opacity-50 cursor-not-allowed' : ''}
+                `}
                 placeholder="Enter"
                 min={0}
                 onKeyPress={(event) => {
