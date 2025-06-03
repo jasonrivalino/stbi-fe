@@ -4,7 +4,7 @@ import { SearchParams } from "../api/interactiveSearch";
 
 type MenuProps = {
   onSubmitInteractive: (params: SearchParams) => void;
-  onSubmitBatch: (formData: FormData) => void; // Add this new prop
+  onSubmitBatch: (params: SearchParams, formData: FormData) => void; // Add this new prop
 };
 
 export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
@@ -110,13 +110,20 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
         return;
       }
 
+      const updatedParams = {
+        ...params,
+        'config.window_size': windowSize,
+        'config.mi_threshold': miThreshold,
+        top_k: maxTerms,
+      };
+
       const formData = new FormData();
       formData.append("queries", queryFile);
       // formData.append("documents", documentFile);
       formData.append("relevance", relevanceFile);
 
       console.log("Submitting parameters (batch):", formData);
-      onSubmitBatch(formData);
+      onSubmitBatch(updatedParams,formData);
     }
   };
 

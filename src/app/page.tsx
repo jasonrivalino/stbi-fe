@@ -14,16 +14,17 @@ export default function Home() {
     setSubmittedParams(params);
 
     try {
-      const result = await fetchInteractiveSearch(params);
+      const result = await fetchInteractiveSearch(params, false);
       setSearchResult(result);
     } catch (error) {
       console.error("Error fetching search result:", error);
     }
   };
 
-  const handleBatchSubmit = async (formData: FormData) => {
+  // Note: ugly casting from SearchParams to BatchParams
+  const handleBatchSubmit = async (params: SearchParams, formData: FormData) => {
     try {
-      const result = await fetchBatchSearch(formData);
+      const result = await fetchBatchSearch(params, formData, false,);
       setSearchResult(result);
     } catch (error) {
       console.error("Error in batch search:", error);

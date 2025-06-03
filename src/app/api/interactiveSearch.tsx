@@ -14,7 +14,7 @@ export type SearchParams = {
   top_k: number;
 };
 
-export async function fetchInteractiveSearch(params: SearchParams) {
+export async function fetchInteractiveSearch(params: SearchParams, expand_query : boolean) {
   const query = new URLSearchParams({
     q: params.q,
     'weights.docs.tf': params['weights.docs.tf'],
@@ -28,6 +28,7 @@ export async function fetchInteractiveSearch(params: SearchParams) {
     'config.max_terms': String(params['config.max_terms']),
     'config.window_size': String(params['config.window_size']),
     'config.mi_threshold': String(params['config.mi_threshold']),
+    'config.do_query_expansion': String(expand_query),
     top_k: String(params.top_k),
   });
 
