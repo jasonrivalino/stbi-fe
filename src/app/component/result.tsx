@@ -144,6 +144,19 @@ export function Result({ result, params }: ResultProps) {
   const isInteractive = result && "documents" in result;
   const isBatch = result && "results" in result;
 
+  const handleDownload = () => {
+    const jsonString = JSON.stringify(result, null, 2); // pretty print with 2 spaces
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "hasil.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+  
   // Dummy fallback for interactive mode (remove when integrating with real data)
   if (isInteractive && result) {
     if (!result.expandedQuery) {
@@ -276,6 +289,12 @@ export function Result({ result, params }: ResultProps) {
           <p className="text-gray-500 italic">No results available yet.</p>
         )}
       </section>
+      <button
+        onClick={handleDownload}
+        className="mt-6 px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 w-full transition-colors duration-300"
+      >
+        Download
+      </button>
     </div>
   );
 }
