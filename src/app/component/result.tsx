@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useState } from "react";
 
 type Document = {
   title: string;
@@ -81,6 +82,7 @@ const QueryResultPanel = ({
   color = "blue",
   isBatch = false,
   params,
+  onClick,
 }: {
   title: string;
   query: string;
@@ -90,9 +92,11 @@ const QueryResultPanel = ({
   color?: "blue" | "green";
   isBatch?: boolean;
   params: ResultProps["params"];
+  onClick?: (title: string, content: string) => void;
 }) => {
   const renderDocumentCard = (doc: Document, index: number) => (
     <div
+    onClick={() => onClick?.(doc.title, doc.content)}
       key={index}
       className="bg-gray-100 p-2 border rounded-md shadow-sm hover:shadow-md transition-shadow duration-200"
     >
@@ -163,6 +167,24 @@ const QueryResultPanel = ({
 export function Result({ result, result_expansion, params }: ResultProps) {
   const isInteractive = result && result_expansion && "documents" in result && "documents" in result_expansion;
   const isBatch = result && result_expansion && "results" in result && "results" in result_expansion;
+  const [selectDoc, setSelectDoc] = useState('');
+  const [contentselectDoc, setcontentselectDoc] = useState<Record<string, number>>({})
+
+  const countandsetTerm = (doc : string,kalimat : string) =>{
+    setSelectDoc(doc)
+    const cleaned = kalimat.toLowerCase()
+    .replace(/[^a-z0-9\-'\s]/g, '') 
+    .replace(/\s+/g, ' ')            
+    .trim();
+    const words = cleaned.split(' ');
+    const wordCount: Record<string, number> = {};
+    for (const word of words) {
+      wordCount[word] = (wordCount[word] || 0) + 1;
+    }
+    console.log(doc)
+
+    setcontentselectDoc(wordCount)
+  }
 
   const handleDownload = () => {
     var hasil ={
@@ -199,16 +221,17 @@ export function Result({ result, result_expansion, params }: ResultProps) {
         ) : null}
       </div>
 
-      {params['config.do_inverted_file'] && (
+      {selectDoc != "" && (
         <div className="bg-white p-2 rounded-md shadow-sm mt-4 text-black">
-          <h2 className="text-sm font-semibold mb-2">Nama Dokumen: Doc5.txt</h2>
+          <h2 className="text-sm font-semibold mb-2">Nama Dokumen: {selectDoc}</h2>
           <p className="text-sm font-semibold">Inverted File Information:</p>
           {/* TODO: Synchronize with inverted data information */}
-          <ul className="list-disc list-inside text-sm mt-1">
-            <li><strong>information:</strong> tf = 3, df = 12, idf = 1.234, weight = 3.702</li>
-            <li><strong>retrieval:</strong> tf = 2, df = 10, idf = 1.321, weight = 2.642</li>
-            <li><strong>data:</strong> tf = 1, df = 20, idf = 0.980, weight = 0.980</li>
-            <li><strong>indexing:</strong> tf = 4, df = 5, idf = 1.699, weight = 6.796</li>
+          <ul className="list-disc list-inside text-sm mt-1 max-h-10 overflow-y-auto">
+            {Object.entries(contentselectDoc).map(([term, tf]) => (
+              <li key={term}>
+                <strong>{term}:</strong> {String(tf)}
+              </li>
+            ))}
           </ul>
         </div>
       )}
@@ -224,6 +247,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
               documents={result.documents}                                // Done result showed
               color="blue"
               params={params}
+              onClick={countandsetTerm}
             />
 
             <QueryResultPanel
@@ -237,6 +261,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
               documents={result_expansion.documents ?? []}                  // TODO: INTEGRATE (still using dummy data)
               color="green"
               params={params}
+              onClick={countandsetTerm}
             />
           </div>
         ) : isBatch && result.results.length > 0 ? (
@@ -256,6 +281,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
                       isBatch={true}
                       averagePrecision={item.ap_score}            // TODO: INTEGRATE (still using dummy data)
                       params={params}
+                      onClick={countandsetTerm}
                     />
                   </div>
 
@@ -272,6 +298,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
                       isBatch={true}
                       averagePrecision={result_expansion.results[idx].ap_score}
                       params={params}
+                      onClick={countandsetTerm}
                     />
                   </div>
                 </div>
