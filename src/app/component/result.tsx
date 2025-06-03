@@ -242,7 +242,10 @@ export function Result({ result, result_expansion, params }: ResultProps) {
             <QueryResultPanel
               title="Original Query"
               query={params.q}                                            // Change param.q to result.query if needed
-              termWeights={result.termWeights}                            // TODO: INTEGRATE (still using dummy data)
+              termWeights={result.query_weight?.reduce<Record<string, number>>((acc, item) => {
+              acc[item.term] = item.weight;
+              return acc;
+              }, {}) ?? {}}
               averagePrecision={result.averagePrecision}                  // TODO: INTEGRATE (still using dummy data)
               documents={result.documents}                                // Done result showed
               color="blue"
@@ -275,7 +278,10 @@ export function Result({ result, result_expansion, params }: ResultProps) {
                     <QueryResultPanel
                       title={`Original Query #${idx + 1}`}
                       query={item.query}                                  // TODO: INTEGRATE (still using dummy data)
-                      termWeights={item.termWeights}                      // TODO: INTEGRATE (still using dummy data)
+                      termWeights={item.query_weight?.reduce<Record<string, number>>((acc, item) => {
+                      acc[item.term] = item.weight;
+                      return acc;
+                      }, {}) ?? {}}
                       documents={item.documents}                          // TODO: INTEGRATE (still using dummy data)
                       color="blue"
                       isBatch={true}
