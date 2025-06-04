@@ -144,12 +144,13 @@ const QueryResultPanel = ({
         </p>
       </div>
 
-      <p className="text-xs text-gray-700 bg-white p-2 rounded-md shadow-sm">
+      {isBatch ? 
+      (<p className="text-xs text-gray-700 bg-white p-2 rounded-md shadow-sm">
         <span className="font-semibold text-sm">
           {isBatch ? "Average Precision" : "Mean Average Precision"}:{" "}
         </span>
         <span className="text-xs">{averagePrecision?.toFixed(4) || "0.0000"}</span>
-      </p>
+      </p>) : null }
 
       <div className="space-y-3 bg-white p-2 rounded-md shadow-sm">
         <h3 className="text-sm font-semibold text-gray-800 mb-2">Ranking ({title})</h3>
