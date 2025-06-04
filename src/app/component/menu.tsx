@@ -115,7 +115,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
     // === BATCH mode validations ===
     if (selectedOption === 'batch') {
       if (!queryFile || !relevanceFile) {
-        alert("Please upload all required batch files: Query, Document, and Relevance Judgement.");
+        alert("Please upload all required batch files: Query and Relevance Judgement file.");
         return;
       }
       const updatedParams = {

@@ -132,7 +132,7 @@ const QueryResultPanel = ({
         <p className={`text-sm ${queryColor}`}>{query}</p>
       </div>
 
-      <div className="h-20 overflow-y-auto bg-white p-2 rounded-md shadow-sm">
+      <div className="h-[5.25rem] overflow-y-auto bg-white p-2 rounded-md shadow-sm">
         <h3 className="text-sm font-semibold text-gray-800">Terms and Weights:</h3>
         <p className="text-xs text-gray-700 mt-1">
           {(termWeights && Object.keys(termWeights).length > 0
@@ -207,8 +207,8 @@ export function Result({ result, result_expansion, params }: ResultProps) {
 
   return (
     <div className={`${isBatch ? "" : "p-4"} border rounded-md bg-gray-100 h-full shadow-lg`}>
-      <div className="flex justify-between items-center">
-        <h1 className={`text-xl font-bold text-black text-center ${isBatch ? "py-4" : ""}`}>
+      <div className={`flex justify-between items-center ${isBatch ? "px-4" : ""}`}>
+        <h1 className={`text-xl font-bold text-black text-center ${isBatch ? "pt-4" : ""}`}>
           Document Rank Result
         </h1>
 
@@ -216,7 +216,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
         (isBatch && result?.results?.length > 0) ? (
           <button
             onClick={handleDownload}
-            className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 w-1/5 transition-colors duration-300 text-xs"
+            className={`px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 w-1/5 transition-colors duration-300 text-xs ${isBatch ? "mt-3" : ""}`}
           >
             Download JSON result
           </button>
@@ -224,12 +224,13 @@ export function Result({ result, result_expansion, params }: ResultProps) {
       </div>
 
       {selectDoc !== "" && (
-        <div className="bg-white p-2 rounded-md shadow-sm mt-4 text-black">
+        <div className={`bg-white p-2 rounded-md shadow-sm mt-4 text-black ${isBatch ? "mx-4 mb-4" : ""}`}>
           <h2 className="text-sm font-semibold mb-2">Nama Dokumen: {selectDoc}</h2>
           <p className="text-sm font-semibold">Inverted File Information:</p>
           <p className="text-sm mt-1 max-h-16 overflow-y-auto">
             {Object.entries(contentselectDoc)
-              .map(([term, tf]) => `${term} (${String(tf)})`)
+              .sort((a, b) => b[1] - a[1]) // Sort descending by TF
+              .map(([term, tf]) => `${term} (${tf})`)
               .join(', ')}
           </p>
         </div>
@@ -272,7 +273,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
           // ✅ Wrap scrollable content + bottom bar in a container
           <div className="relative">
             {/* Scrollable Panel Content */}
-            <div className="space-y-6 max-h-[429px] overflow-y-auto px-4 pb-4">
+            <div className="space-y-6 max-h-[405px] overflow-y-auto px-4 pb-4 mt-4">
               {result.results.map((item, idx) => (
                 <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="">
@@ -315,7 +316,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
             </div>
 
             {/* ✅ Bottom Summary Bar - Moved OUTSIDE scrollable container */}
-            <div className="sticky bottom-0 left-0 right-0 z-10 bg-white border-t border-gray-300 p-4 shadow-inner">
+            <div className="sticky bottom-0 left-0 right-0 z-10 bg-white border-t border-gray-300 p-4 shadow-inner mt-4">
               <div className="flex flex-col sm:flex-row justify-between items-center text-sm font-medium text-gray-800">
 
                 {/* TODO: INTEGRATE (still using dummy data) */}
