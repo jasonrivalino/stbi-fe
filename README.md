@@ -1,4 +1,4 @@
-# TUGAS BESAR Sistem Temu Balik Informasi - IF4042
+# Tugas Besar Sistem Temu Balik Informasi - IF4042
 > IF4042 Tugas Besar - Query Expansion: Automatically Generated Thesaurus Method (FE Repository)
 
 ## Anggota Kelompok
@@ -47,7 +47,7 @@
 Aplikasi yang dikembangkan dalam pengerjaan Tugas Besar ini merupakan aplikasi yang berfungsi untuk melakukan perluasan terhadap kueri pencarian awal (Query Expansion) yang dimasukkan oleh pengguna. Metode Query Expansion yang digunakan adalah Automatically Generated Thesaurus, yang memperluas hasil pencarian melalui proses analisis otomatis terhadap keterkaitan kata-kata yang berelasi dalam koleksi dokumen yang tersedia. Dengan menggunakan metode ini, aplikasi yang dikembangkan mampu membantu pengguna dalam melakukan pencarian informasi secara lebih fleksibel dan relevan sesuai dengan kebutuhan analisis yang diinginkan.
 
 ## Program Interface
-![Screenshot (274)](https://github.com/user-attachments/assets/e6977c2d-96ba-4c5a-b252-e3b59dfd9a47)
+![Screenshot (280)](https://github.com/user-attachments/assets/78166994-b903-4233-8926-096368f976f5)
 
 ## Tech-Stack
 1. Next.js
