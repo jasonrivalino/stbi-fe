@@ -38,11 +38,11 @@ export default function Home() {
         <h1 className="text-3xl font-bold pt-12 pb-7 text-center">
           Query Expansion: Automatically Generated Thesaurus Method
         </h1>
-        <div className="flex flex-row w-full gap-6 pb-14">
-          <div className="w-2/3">
+        <div className="flex flex-col w-full gap-8 pb-16">
+          <div>
             <Menu onSubmitInteractive={handleInteractiveSubmit} onSubmitBatch={handleBatchSubmit} />
           </div>
-          <div className="w-full">
+          <div>
             <Result
               selected={submittedParams?.q || ""}
               result={searchResult?.result}

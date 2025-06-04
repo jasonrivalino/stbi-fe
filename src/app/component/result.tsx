@@ -118,23 +118,19 @@ const QueryResultPanel = ({
   const bgColor = color === "green" ? "bg-green-50" : "bg-blue-50";
 
   return (
-      <div
-      className={`overflow-y-auto ${
-        isBatch
-          ? ""
-          : selectedDoc
-          ? "max-h-[310px]"
-          : "max-h-[460px]"
-      } ${bgColor} p-4 rounded-md shadow-md space-y-4`}
-    >
-      <div className="bg-white p-2 rounded-md shadow-sm">
-        <h2 className="text-sm font-semibold text-black mb-1">{title}</h2>
-        <p className={`text-sm ${queryColor}`}>{query}</p>
+    <div className={`${bgColor} p-4 rounded-md shadow-md h-full gap-4`}>
+      {/* Query Section (static) */}
+      <div className="bg-white p-2 rounded-md shadow-sm h-[100px] mb-4 flex flex-col">
+        <h2 className="text-sm font-semibold text-black mb-1 flex-shrink-0">{title}</h2>
+        <p className={`text-sm overflow-y-auto ${queryColor}`} style={{ maxHeight: "calc(80px)" }}>
+          {query}
+        </p>
       </div>
 
-      <div className="h-[5.25rem] overflow-y-auto bg-white p-2 rounded-md shadow-sm">
-        <h3 className="text-sm font-semibold text-gray-800">Terms and Weights:</h3>
-        <p className="text-xs text-gray-700 mt-1">
+      {/* Term Weights Section (static) */}
+      <div className="bg-white p-2 rounded-md shadow-sm h-[90px] mb-4 flex flex-col">
+        <h3 className="text-sm font-semibold text-gray-800 flex-shrink-0">Terms and Weights:</h3>
+        <p className="text-xs text-gray-700 mt-1 overflow-y-auto max-h-[50px]">
           {(termWeights && Object.keys(termWeights).length > 0
             ? Object.entries(termWeights)
             : [["information", 0.8], ["retrieval", 0.7]]
@@ -144,28 +140,37 @@ const QueryResultPanel = ({
         </p>
       </div>
 
-      {isBatch ? 
-      (<p className="text-xs text-gray-700 bg-white p-2 rounded-md shadow-sm">
-        <span className="font-semibold text-sm">
-          {isBatch ? "Average Precision" : "Mean Average Precision"}:{" "}
-        </span>
-        <span className="text-xs">{averagePrecision?.toFixed(4) || "0.0000"}</span>
-      </p>) : null }
+      {/* Average Precision Section */}
+      {isBatch && (
+        <div className="bg-white p-2 rounded-md shadow-sm mb-3">
+          <p className="text-xs text-gray-700">
+            <span className="font-semibold text-sm">Average Precision: </span>
+            <span className="text-sm">{averagePrecision?.toFixed(4) || "0.0000"}</span>
+          </p>
+        </div>
+      )}
 
-      <div className="space-y-3 bg-white p-2 rounded-md shadow-sm">
-        <h3 className="text-sm font-semibold text-gray-800 mb-2">Ranking ({title})</h3>
-        <div className="space-y-3">
-          {documents.map((doc, idx) => (
-            <div key={idx} className="px-2 pb-2">
-              {renderDocumentCard(doc, idx)}
-            </div>
-          ))}
+      {/* Ranking Section */}
+      <div className="bg-white p-2 rounded-md shadow-sm" style={{ maxHeight: "370px" }}>
+        <div className="flex flex-col max-h-[300px]">
+          {/* Static title */}
+          <h3 className="text-sm font-semibold text-gray-800 mb-2 flex-shrink-0">
+            Ranking ({title})
+          </h3>
+
+          {/* Scrollable document list */}
+          <div className="overflow-y-auto space-y-3 pr-1" style={{ flex: 1 }}>
+            {documents.map((doc, idx) => (
+              <div key={idx} className="px-2 pb-2">
+                {renderDocumentCard(doc, idx)}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
-}
-
+};
 
 export function Result({ result, result_expansion, params }: ResultProps) {
   const isInteractive = result && result_expansion && "documents" in result && "documents" in result_expansion;
@@ -228,7 +233,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
         <div className={`bg-white p-2 rounded-md shadow-sm mt-4 text-black ${isBatch ? "mx-4 mb-4" : ""}`}>
           <h2 className="text-sm font-semibold mb-2">Nama Dokumen: {selectDoc}</h2>
           <p className="text-sm font-semibold">Inverted File Information:</p>
-          <p className="text-sm mt-1 max-h-16 overflow-y-auto">
+          <p className="text-sm mt-1">
             {Object.entries(contentselectDoc)
               .sort((a, b) => b[1] - a[1]) // Sort descending by TF
               .map(([term, tf]) => `${term} (${tf})`)
@@ -274,7 +279,7 @@ export function Result({ result, result_expansion, params }: ResultProps) {
           // ✅ Wrap scrollable content + bottom bar in a container
           <div className="relative">
             {/* Scrollable Panel Content */}
-            <div className="space-y-6 max-h-[405px] overflow-y-auto px-4 pb-4 mt-4">
+            <div className="space-y-6 overflow-y-auto px-4 pb-4 mt-4">
               {result.results.map((item, idx) => (
                 <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="">

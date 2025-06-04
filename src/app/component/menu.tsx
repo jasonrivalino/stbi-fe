@@ -55,31 +55,10 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
 
   // Function to handle form submission
   const handleFormSubmit = () => {
-    // const tfDocsInactive = params['weights.docs.tf'] === 'n';
-    // const idfDocsInactive = !isIDFDocumentChecked;
-    // const cosineDocsInactive = !isCosineDocumentChecked;
-
-    // const maxTerms = maxTerms >= 0;
-
-    // if (tfDocsInactive && idfDocsInactive && cosineDocsInactive) {
-    //   alert('Please select at least one document weighting method (TF, IDF, or Cosine) for the documents.');
-    //   return;
-    // }
-
-    // if (!maxTerms) {
-    //   alert('Please enter a valid number for Max Terms.');
-    //   return;
-    // }
-
     if (!selectedOption) {
       alert("Please select a query method: Interactive or Batch.");
       return;
     }
-
-    // if (isInvertedDocumentChecked && !documentFile) {
-    //   alert("Please upload a document file to view the inverted file content.");
-    //   return;
-    // }
 
     // === INTERACTIVE mode validations ===
     if (selectedOption === 'interactive') {
@@ -87,15 +66,6 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
         alert("Please enter your query input.");
         return;
       }
-
-    //   const tfQueryInactive = params['weights.query.tf'] === 'n';
-    //   const idfQueryInactive = !isIDFQueryChecked;
-    //   const cosineQueryInactive = !isCosineQueryChecked;
-
-    //   if (tfQueryInactive && idfQueryInactive && cosineQueryInactive) {
-    //     alert("Please select at least one weighting method (TF, IDF, or Cosine) for the query.");
-    //     return;
-    //   }
 
       const updatedParams = {
         ...params,
@@ -291,13 +261,15 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
   };
 
   return (
-    <div className="pt-4 pb-8 px-4 border rounded-xl text-white bg-gray-800 shadow-lg w-full">
-      <div className="flex flex-row gap-5">
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-row justify-between items-center pb-2 border-b-2">
+    <div className="py-4 px-4 border rounded-xl text-white bg-gray-800 shadow-lg w-full">
+      <div className="flex flex-row gap-4">
+        
+        {/* Left Section: Parameters & Toggles */}
+        <div className="flex flex-col gap-4 w-1/3 pr-1 justify-center align-middle">
+          <div className="flex flex-row justify-between items-center pb-3 border-b-2">
 
             {/* Stemming Toggle */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <h2 className="text-base font-semibold">Stemming:</h2>
               <label className="inline-flex items-center cursor-pointer relative">
                 <input
@@ -306,7 +278,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                   onChange={handleStemmingToggle}
                   className="sr-only peer"
                 />
-                <div className="w-6 h-6 bg-gray-300 rounded-lg relative transition-colors duration-300 peer-checked:bg-blue-500 flex items-center justify-center">
+                <div className="w-5 h-5 bg-gray-300 rounded-md relative transition-colors duration-300 peer-checked:bg-blue-500 flex items-center justify-center">
                   {isStemmingChecked && (
                     <span className="text-white text-xs font-bold">✔</span>
                   )}
@@ -324,7 +296,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                   onChange={handleEliminationToggle}
                   className="sr-only peer"
                 />
-                <div className="w-6 h-6 bg-gray-300 rounded-lg relative transition-colors duration-300 peer-checked:bg-blue-500 flex items-center justify-center">
+                <div className="w-5 h-5 bg-gray-300 rounded-md relative transition-colors duration-300 peer-checked:bg-blue-500 flex items-center justify-center">
                   {isEliminationChecked && (
                     <span className="text-white text-xs font-bold">✔</span>
                   )}
@@ -392,7 +364,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
           </div>
           
           {/* Terms */}
-          <div className="flex flex-row w-full pt-2 border-t-2 justify-between items-center">
+          <div className="flex flex-row w-full pt-3 border-t-2 justify-between items-center">
             {/* Max Terms */}
             <div className="flex items-center gap-3 w-full">
               <h2 className="text-base font-semibold mt-[0.125rem]">Max Terms:</h2>
@@ -424,7 +396,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                     onChange={handleAddAllTermsToggle}
                     className="sr-only peer"
                   />
-                  <div className="w-6 h-6 bg-gray-300 rounded-md relative transition-colors duration-300 peer-checked:bg-blue-500 flex items-center justify-center">
+                  <div className="w-5 h-5 bg-gray-300 rounded-md relative transition-colors duration-300 peer-checked:bg-blue-500 flex items-center justify-center">
                     {isAddAllTermsChecked && (
                       <span className="text-white text-xs font-bold">✔</span>
                     )}
@@ -434,7 +406,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
             </div>
           
           {/* Thesaurus Options */}
-          <div className="flex flex-row w-full pt-2 border-t-2 align-middle justify-between items-center">
+          <div className="flex flex-row w-full pt-3 border-t-2 align-middle justify-between items-center">
             <h2 className="text-base font-semibold">Thesaurus Options:</h2>
 
             <div className="flex flex-row gap-5 items-center">
@@ -470,32 +442,92 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Query Method */}
-          <div className="flex flex-col gap-2 w-full justify-center align-middle pt-2 pb-4 border-y-2">
-            <div className="flex items-center justify-between">
-              <h2 className="text-base font-semibold">Query Method:</h2>
-              {/* Add Checkboxed for Inverted Document */}
-              {/* <div className="flex items-center">
-                <h2 className="text-sm font-semibold mr-3 text-white">
-                  Inverted Document:
-                </h2>
-                <label className="inline-flex items-center cursor-pointer relative">
-                  <input
-                    type="checkbox"
-                    checked={isInvertedDocumentChecked}
-                    onChange={handleInvertedDocumentToggle}
-                    className="sr-only peer"
-                  />
-                  <div className="w-4 h-4 bg-gray-300 rounded-md relative transition-colors duration-300 peer-checked:bg-blue-500 flex items-center justify-center">
-                    {isInvertedDocumentChecked && (
-                      <span className="text-white text-xs font-bold">✔</span>
-                    )}
-                  </div>
-                </label>
-              </div> */}
+        {/* Vertical Divider */}
+        <div className="w-[0.125rem] bg-white" />
+
+        {/* Right Section: Query Method */}
+        <div className="flex flex-col w-2/3 pl-1">
+          {/* Query Weighting */}
+          <div className="flex flex-row gap-7 mb-2 border-b-2 pb-3">
+            <h2 className={`font-semibold text-white`}>
+              Query Weighting:
+            </h2>
+
+            {/* TF */}
+            <div className="flex flex-row justify-between items-center ml-auto">
+              <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold text-white`}>
+                TF
+              </h2>
+              <select
+                className={`p-1 bg-gray-700 text-white rounded-md text-sm`}
+                value={params['weights.query.tf']}
+                onChange={(e) =>
+                  updateParam('weights.query.tf', e.target.value as SearchParams['weights.query.tf'])
+                }
+              >
+                <option value="l">Logarithmic</option>
+                <option value="b">Binary</option>
+                <option value="a">Augmented</option>
+                <option value="n">Raw</option>
+              </select>
             </div>
+
+            {/* IDF */}
+            <div className="flex items-center justify-between">
+              <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold text-white`}>
+                IDF
+              </h2>
+              <label className="inline-flex items-center cursor-pointer relative">
+                <input
+                  type="checkbox"
+                  checked={isIDFQueryChecked}
+                  onChange={handleIDFQueryToggle}
+                  className="sr-only peer"
+                />
+                <div
+                  className={`w-5 h-5 rounded-md transition-colors duration-300 flex items-center justify-center
+                    bg-gray-300 peer-checked:bg-blue-500 cursor-pointer`}
+                >
+                  {isIDFQueryChecked && (
+                    <span className="text-white text-xs font-bold">✔</span>
+                  )}
+                </div>
+              </label>
+            </div>
+
+            {/* Cosine */}
+            <div className="flex items-center justify-between">
+              <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold text-white`}>
+                Cosine
+              </h2>
+              <label className="inline-flex items-center cursor-pointer relative">
+                <input
+                  type="checkbox"
+                  checked={isCosineQueryChecked}
+                  onChange={handleCosineQueryToggle}
+                  className="sr-only peer"
+                />
+                <div
+                  className={`w-5 h-5 rounded-md transition-colors duration-300 flex items-center justify-center
+                    bg-gray-300 peer-checked:bg-blue-500 cursor-pointer`}
+                >
+                  {isCosineQueryChecked && (
+                    <span className="text-white text-xs font-bold">✔</span>
+                  )}
+                </div>
+              </label>
+            </div>
+          </div>
+
+          {/* Query Method Section */}
+          <div className="flex flex-col gap-2 w-full justify-center align-middle">
             <div className="flex flex-col gap-2 w-full">
+              <div className="flex items-center justify-between">
+                <h2 className="text-base font-semibold mt-1">Query Method:</h2>
+              </div>
+
               {/* Interactive */}
               <label className="inline-flex items-center cursor-pointer relative">
                 <input
@@ -517,76 +549,6 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                 placeholder="Enter your query input"
                 onChange={(e) => setQuery(e.target.value)}
               />
-
-              {/* Query Weighting */}
-              <div className="flex flex-row gap-7 mt-1">
-                <h2 className={`text-sm font-semibold text-white`}>
-                  Query Weighting:
-                </h2>
-                
-                {/* TF */}
-                <div className="flex flex-row justify-between items-center ml-auto">
-                  <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold text-white`}>
-                    TF
-                  </h2>
-                  <select
-                    className={`p-1 bg-gray-700 text-white rounded-md text-sm`}
-                    value={params['weights.query.tf']}
-                    onChange={(e) => updateParam('weights.query.tf', e.target.value as SearchParams['weights.query.tf'])}
-                  >
-                    <option value="l">Logarithmic</option>
-                    <option value="b">Binary</option>
-                    <option value="a">Augmented</option>
-                    <option value="n">Raw</option>
-                  </select>
-                </div>
-
-                {/* IDF */}
-                <div className="flex items-center justify-between">
-                  <h2 className={`text-sm justify-center align-center text-center mr-2 font-semiboldtext-white`}>
-                    IDF
-                  </h2>
-                  <label className="inline-flex items-center cursor-pointer relative">
-                    <input
-                      type="checkbox"
-                      checked={isIDFQueryChecked}
-                      onChange={() => handleIDFQueryToggle()}
-                      className="sr-only peer"
-                    />
-                    <div
-                      className={`w-5 h-5 rounded-md relative transition-colors duration-300 flex items-center justify-center
-                        bg-gray-300 peer-checked:bg-blue-500 cursor-pointer`}
-                    >
-                      {isIDFQueryChecked && (
-                        <span className="text-white text-xs font-bold">✔</span>
-                      )}
-                    </div>
-                  </label>
-                </div>
-
-                {/* Cosine */}
-                <div className="flex items-center justify-between">
-                  <h2 className={`text-sm justify-center align-center text-center mr-2 font-semibold text-white`}>
-                    Cosine
-                  </h2>
-                  <label className="inline-flex items-center cursor-pointer relative">
-                    <input
-                      type="checkbox"
-                      checked={isCosineQueryChecked}
-                      onChange={() => handleCosineQueryToggle()}
-                      className="sr-only peer"
-                    />
-                    <div
-                      className={`w-5 h-5 rounded-md relative transition-colors duration-300 flex items-center justify-center
-                        bg-gray-300 peer-checked:bg-blue-500 cursor-pointer`}
-                    >
-                      {isCosineQueryChecked && (
-                        <span className="text-white text-xs font-bold">✔</span>
-                      )}
-                    </div>
-                  </label>
-                </div>
-              </div>
 
               {/* Batch */}
               <label className="inline-flex items-center cursor-pointer relative mt-2">
@@ -614,24 +576,9 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                     disabled={!isBatch}
                     className={`p-1 bg-gray-700 text-white rounded-md text-xs border border-gray-600 transition-colors duration-200 cursor-pointer
                       ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}
-                    onChange={(e) => handleQueryFileUpload(e)}
+                    onChange={handleQueryFileUpload}
                   />
                 </div>
-
-                {/* Document file */}
-                {/* <div className="flex flex-col">
-                  <label className={`text-xs font-medium mb-1 ${!isBatch ? 'text-gray-500' : 'text-white'}`}>
-                    Document File
-                  </label>
-                  <input
-                    type="file"
-                    accept="*"
-                    disabled={!isBatch}
-                    className={`p-1 bg-gray-700 text-white rounded-md text-xs border border-gray-600 transition-colors duration-200 cursor-pointer
-                      ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}
-                    onChange={(e) => handleDocumentFileUpload(e)}
-                  />
-                </div> */}
 
                 {/* Relevance Judgment file */}
                 <div className="flex flex-col">
@@ -643,8 +590,8 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
                     accept="*"
                     disabled={!isBatch}
                     className={`p-1 bg-gray-700 text-white rounded-md text-xs border border-gray-600 transition-colors duration-200 cursor-pointer
-                      ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}                    
-                    onChange={(e) => handleRelevanceFileUpload(e)}
+                      ${!isBatch ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-400 hover:bg-gray-600'}`}
+                    onChange={handleRelevanceFileUpload}
                   />
                 </div>
               </div>
@@ -656,7 +603,7 @@ export function Menu({ onSubmitInteractive, onSubmitBatch }: MenuProps) {
       {/* Submit Button */}
       <button
         onClick={handleFormSubmit}
-        className="mt-7 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 w-full transition-colors duration-300"
+        className="font-semibold mt-7 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 w-full transition-colors duration-300"
       >
         Submit
       </button>
